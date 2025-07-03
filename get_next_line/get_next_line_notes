@@ -1,0 +1,148 @@
+Get Next Line
+
+Leer una línea de un fd es demasiado aburrido
+从文件描述符读取一行太无聊了
+
+Resumen: El objetivo de este proyecto es simple: programar una función que devuelva una línea leída de un file descriptor.
+摘要： 这个项目的目标很简单：编写一个函数，返回从文件描述符读取的一行内容。
+
+Objetivos
+Este proyecto no solo te permitirá añadir una función bastante práctica a tu colección; también te hará aprender el increíble concepto de las variables estáticas en C.
+目标
+这个项目不仅能让你为自己的程序库添加一个非常方便的函数，还能让你学习 C 语言中静态变量的神奇概念。
+
+Instrucciones generales
+• Tu proyecto deberá estar escrito en C.
+• Tu proyecto debe estar escrito siguiendo la Norma. Si tienes archivos o funciones adicionales, estas están incluidas en la verificación de la Norma y tendrás un 0 si hay algún error de norma en cualquiera de ellos.
+• Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+• Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+• Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y por supuesto tu Makefile no debe hacer relink.
+一般说明
+- 项目必须用 C 语言编写。
+- 您的项目必须按照标准编写。如果您有额外的文件或函数，这些文件或函数将被纳入标准检查范围，如果其中任何文件或函数出现标准错误，您将得到 0 分。
+- 您的函数不得意外终止（segfault、bus error、double free 等），除非出现未定义的行为。如果出现这种情况，您的项目将被视为非功能性项目，在评估过程中将得到 0 分。
+- 必要时必须正确释放堆上分配的所有内存。不允许内存泄漏。
+- 如果语句需要，您必须提供一个 Makefile，该 Makefile 将使用 -Wall、-Werror 和 -Wextra 标志将您的源文件编译为所需的输出，并使用 cc，当然，您的 Makefile 不得重新链接。
+
+• Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+• Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+• Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+• Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu programa funciona correctamente durante tu evaluación y la de otros compañeros.
+Y sí, tienes permitido utilizar estas pruebas durante tu evaluación o la de otros compañeros.
+• Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+- 您的 Makefile 必须至少包含 $(NAME)、all、clean、fclean 和 re 规则。
+- 为了提供项目的奖励，您必须在 Makefile 中加入奖励规则，在其中添加项目主要部分禁止使用的任何头文件、库或函数。奖励规则必须放在单独的 _bonus.{c/h} 文件中。强制部分和附加功能将分别评估。
+- 如果您的项目允许使用 libft，则必须将其源代码和相关的 Makefile 复制到 libft 目录，并附上相应的 Makefile。项目的 Makefile 必须首先使用其 Makefile 编译库，然后再编译项目。
+- 我们建议您为项目创建测试程序，尽管这项工作不会交付或评估。这将使您有机会在您和同行进行评估时验证您的程序是否正常运行。
+是的，您可以在您的评估或同行的评估中使用这些测试。
+- 将您的作品提交到指定的 Git 仓库。只有 Git 仓库中的作品才会被评估。如果Deepthought对你的工作进行评估，它将在你的同行之后进行。如果在 Deepthought 评审期间发现 bug，则评审结束。
+
+
+
+Parte obligatoria
+
+强制部分
+
+• Llamar a tu función get_next_line de manera repetida (por ejemplo, usando un bucle) te permitirá leer el contenido del archivo hacia el que apunta el file descriptor, línea a línea, hasta el final.
+• Tu función deberá devolver la línea que se acaba de leer. Si no hay nada más que leer o si ha ocurrido un error, deberá devolver NULL.
+• Asegúrate de que tu función se comporta adecuadamente cuando lea de un archivo y cuando lea de stdin.
+• Ten en cuenta que la línea devuelta debe terminar con el caracter n, excepto si se ha llegado al final del archivo y esté no termina con un caracter n.
+• En el header get_next_line.h deberás tener como mínimo el prototipo de la función get_next_line.
+• Añade todas las funciones de ayuda que necesites en el archivo get_next_line_utils.c
+
+- 重复调用 get_next_line 函数（例如使用循环），可以逐行读取文件描述符指向的文件内容，直到最后一行。
+- 函数应返回刚刚读取的行。如果没有其他可读取的内容或发生错误，则应返回 NULL。
+- 确保你的函数在从文件读取和从 stdin 读取时行为正确。
+- 需要注意的是，返回的行必须以 n 字符结束，除非已经到达文件的末尾，但该行没有以 n 字符结束。
+- 在 get_next_line.h 头文件中，至少应该有 get_next_line 函数的原型。
+- 在 get_next_line_utils.c 文件中添加所有需要的辅助函数。
+
+
+
+Un buen comienzo sería saber qué es una variable estatica.
+
+了解什么是静态变量是一个良好的开端。
+
+• Tu programa debe compilar con el flag -D BUFFER_SIZE=xx. Este flag se utilizará para determinar el tamaño del buffer de las lecturas de tu get_next_line(). Este parámetro será modificado por tus evaluadores y por Moulinette para probar tu programa.
+
+- 编译程序时应使用 -D BUFFER_SIZE=xx 标志。该标志将用于确定 get_next_line() 读取的缓冲区大小。测试人员和 Moulinette 将修改该参数，以测试你的程序。
+
+Debemos ser capaces de compilar este proyecto con y sin el flag -D BUFFER_SIZE, junto a los flags habituales. Puedes elegir el valor por defecto que prefieras.
+
+我们可以在编译该项目时使用或不使用 -D BUFFER_SIZE 标记以及其他常规标记。你可以选择你喜欢的默认值。
+
+• El programa se compilará de la siguiente forma (se utiliza como ejemplo un tamaño de buffer de 42):
+cc -Wall -Werror -Wextra -D BUFFER_SIZE=42 <archivos>.c.
+• Se considera que get_next_line() tiene un comportamiento indeterminado si el archivo al que apunta el fd ha cambiado desde la última vez que se llamó, siempre que read() no haya llegado al final del archivo.
+• Se considera que get_next_line() tiene un comportamiento indeterminado cuando lo que se lee es un archivo binario. Sin embargo, puedes implementar alguna manera lógica de sortear este problema, si quieres.
+
+- 程序的编译过程如下（以缓冲区大小为 42 为例）：
+cc -Wall -Werror -Wextra -D BUFFER_SIZE=42 <files>.c.
+- 如果自上次调用 get_next_line() 以来，fd 指向的文件发生了变化，那么如果 read() 没有到达文件的末尾，get_next_line() 将被视为未定义的行为。
+- 当读取的是二进制文件时，Get_next_line() 被认为具有不确定行为。不过，如果你愿意，也可以采用某种逻辑方法来解决这个问题。
+
+¿Funciona correctamente tu get_next_line si el BUFFER_SIZE es 9999?
+¿Y si es 1? ¿Qué tal con 10000000? ¿Sabes por qué?
+
+如果 BUFFER_SIZE 为 9999，get_next_line 是否能正常工作？
+如果是 1 呢？ 10000000 呢？ 你知道为什么吗？
+
+Intenta leer lo menos posible cada vez que se llame a get_next_line(). Si encuentras un salto de línea, deberás devolver la línea actual. No leas el archivo entero y luego proceses cada línea.
+
+每次调用 get_next_line() 时，尽量少读。如果发现换行符，应该返回当前行。不要先读取整个文件，然后再处理每一行。
+
+Prohibido
+• No se permite la utilización de tu libft en este proyecto.
+• Se prohibe la utilización de lseek
+• Se prohibe la utilización de variables globales.
+
+不允许
+- 本项目不允许使用您的 libft。
+- 禁止使用 lseek
+- 禁止使用全局变量。
+
+
+
+Parte bonus
+Este proyecto es bastante directo y no deja mucho margen a los bonus. Sin embargo, confiamos en tu creatividad. Si has completado la parte obligatoria, inténtalo con estos bonus.
+Aquí tienes los requisitos de la parte bonus:
+• Desarrolla get_next_line() con una sola variable estática.
+• Tu get_next_line tiene que ser capaz de gestionar múltiples fd a la vez. Es decir, si tienes tres fd disponibles para lectura (por ejemplo: 3, 4 y 5), debes poder utilizar get_next_line una vez sobre el fd 3, otra vez sobre el fd 4, y otra vez sobre el fd 5 de forma alterna. Y sí, no debe perder el hilo de lectura de cada uno de los fd.
+Añade el sufijo _bonus.[c\h] a los archivos de esta parte bonus. Esto quiere decir que además de los archivos de la parte obligatoria, tienes que entregar los tres archivos siguientes:
+• get_next_line_bonus.c
+• get_next_line_bonus.h
+• get_next_line_utils_bonus.c
+奖金部分
+这个项目非常简单，没有太多的奖励空间。不过，我们相信您的创造力。如果您已经完成了必做部分，那就试试这些奖励吧。
+以下是奖励部分的要求：
+- 使用一个静态变量开发 get_next_line()。
+- 你的 get_next_line 必须能够同时处理多个 fd。也就是说，如果有三个 fd 可供读取（例如：3、4 和 5），则必须能够在 fd 3、fd 4 和 fd 5 上交替使用一次 get_next_line。当然，也不能丢失每个 fd 的读取线程。
+在此奖励部分的文件中添加后缀 _bonus.[c\h]。这意味着，除了必填部分的文件外，你还必须提供以下三个文件：
+- get_next_line_bonus.c
+- get_next_line_bonus.h
+- get_next_line_utils_bonus.c
+
+La parte bonus solo será evaluada si la parte obligatoria está PERFECTA. Perfecta significa que se ha completado en su totalidad y funciona perfectamente, sin ningún fallo. Si no has completado TODOS los requisitos de la parte obligatoria, tu parte bonus no será evaluada de ninguna manera.
+奖励部分只有在必填部分完美无缺的情况下才会进行评估。完美的意思是已完成全部内容，并能完美运行，没有任何故障。如果您没有完成必修部分的所有要求，您的奖励部分将不会得到评估。
+
+Entrega y evaluación
+Entrega tus ejercicios el tu directorio Git, como haces habitualmente. Solo se evaluará el trabajo que haya dentro de tu repositorio. Comprueba varias veces que el nombre de tus archivos es el correcto.
+交付与评估
+像往常一样，将您的练习提交到您的 Git 目录。仅评估您存储库内的工作。请多次检查您的文件名是否正确。
+
+Cuando hagas los ejercicios, recuerda:
+1) Tanto el tamaño del buffer como el de la línea pueden tener valores muy diferentes.
+2) Un fd no solo apunta a archivos normales.
+Sé inteligente y compara y verifica tus ejercicios con tus compañeros. Prepara una batería de pruebas de cara a la evaluación.
+做练习时，请记住：
+1)缓冲区大小和行大小可以具有非常不同的值。
+2）fd不仅仅指向常规文件。
+聪明一点，和同学比较、验证自己的练习。准备一系列测试用于评估。
+
+Una vez superado, no dudes en añadir tu get_next_line() a tu lift.
+一旦你完成了这些，就随意将 get_next_line() 添加到你的 lift 中。
+
+
+
+
+

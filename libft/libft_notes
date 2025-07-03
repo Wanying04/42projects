@@ -1,0 +1,119 @@
+Instrucciones generales
+
+Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+您的函数不得意外终止（段错误、总线错误、双重释放等），除非出现未定义的行为。如果发生这种情况，您的项目将被视为无法正常运行，并且您在评估期间将收到 0 分。
+Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+必要时必须适当释放堆中分配的所有内存。不允许出现内存泄漏。
+Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y por supuesto tu Makefile no debe hacer relink.
+如果语句需要它，您必须提供一个Makefile，它将使用-Wall、-Werror 和-Wextra 标志将源文件编译为所需的输出，使用cc，当然您的Makefile 不得重新链接。
+Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+您的Makefile 必须至少包含规则$(NAME)、all、clean、fclean 和 re。
+Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+为了给您的项目带来好处，您必须在Makefile 中包含一条好处规则，您将在其中添加项目主要部分中禁止的所有头文件、库或函数。奖金必须位于不同的文件_bonus.{c/h}中。必修部分和奖金部分是分开评估的。
+Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+如果您的项目允许使用libft，则必须将其源代码及其关联的Makefile 及其相应的Makefile 复制到libft 目录中。您的项目的 Makefile 必须首先使用其 Makefile 编译库，然后再编译项目。
+Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu programa funciona correctamente durante tu evaluación y la de otros compañeros.
+我们建议为您的项目创建测试程序，尽管这项工作不会交付或评估。它将使您有机会在您和其他同事的评估过程中验证您的程序是否正常运行。
+Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+将您的工作交付到指定的Git 存储库。仅评估 Git 存储库中的工作。如果 Deepthought 评估您的工作，它会在您的同事之后进行评估。如果 Deepthought 评估过程中发现错误，评估将终止。
+
+------------------------------------
+
+III.1. Consideraciones técnicas
+
+• Declarar variables globales está prohibido.
+• Si necesitas separar una función compleja en varias, asegúrate de utilizar la palabra static para ello. De esta forma, las funciones se quedarán en el archivo apropiado.
+• Pon todos tus archivos en la raíz de tu repositorio.
+• Se prohibe entregar archivos no utilizados.
+• Todos los archivos .c deben compilarse con las flags -Wall -Werror -Wextra.
+• Debes utilizar el comando ar para generar la librería. El uso de libtool queda prohibido.
+• Tu libft.a tiene que ser creado en la raíz del repositorio.
+• 禁止声明全局变量。
+• 如果您需要将一个复杂的函数分成多个函数，请务必使用静态一词。这样，函数将保留在适当的文件中。
+• 将所有文件放入存储库的根目录中。
+• 禁止传送未使用的文件。
+• 所有.c 文件都必须使用-Wall -Werror -Wextra 标志进行编译。
+• 您必须使用ar 命令来生成库。禁止使用 libtool。
+• 必须在存储库的根目录中创建libft.a。
+
+------------------------------------
+
+III.2. Parte 1 - Funciones de libc
+
+Para empezar, deberás rehacer algunas funciones de la libc. Tus funciones tendrán los mismos prototipos e implementarán los mismos comportamientos que las funciones originales. Deberán ser tal y como las describe el man. La única diferencia será la nomenclatura.
+Empezarán con el prefijo “ft_”. Por ejemplo, strlen se convertirá en ft_strlen.
+首先，您必须重做 libc 的一些功能。您的函数将具有与原始函数相同的原型并实现相同的行为。他们一定是如男人所描述的那样。唯一的区别是命名法。
+它们将以前缀“ft_”开头。例如，strlen 将变为 ft_strlen。
+
+Algunas funciones tienen en sus prototipos la palabra “restrict”.
+Esta palabra forma parte del estándar de c99. Por lo tanto, está prohibido incluirla en tus propios prototipos, así como compilar tu código con la flag -std=c99.
+有些函数的原型中有“restrict”一词。
+这个词是c99标准的一部分。因此，禁止将其包含在您自己的原型中，以及使用 -std=c99 标志编译您的代码。
+
+Deberás escribir tus propias funciones implementando las siguientes funciones originales. No requieren de funciones autorizadas:
+您将需要编写自己的函数来实现以下原始函数。它们不需要授权的功能：
+
+• isalpha
+
+• isdigit
+
+• isalnum
+
+• isascii
+
+• isprint
+
+• strlen
+
+• memset
+
+• bzero
+
+• memcpy
+
+• memmove
+
+• strlcpy
+
+• strlcat
+
+• toupper
+
+• tolower
+
+• strchr
+
+• strrchr
+
+• strncmp
+
+• memchr
+
+• memcmp
+
+• strnstr
+
+• atoi
+
+Para implementar estas otras dos funciones, tendrás que utilizar malloc():
+要实现另外两个函数，您必须使用 malloc()：
+• calloc
+• strdup
+
+Dependiendo de tu sistema operativo actual, la página del manual de calloc y el comportamiento de la función pueden diferir. La siguiente instrucción sustituye lo que puedes encontrar en la página del manual: Si nmemb o size es 0, entonces calloc() devuelve un valor de puntero único que más tarde puede pasarse con éxito a free().
+根据您当前的操作系统，calloc 手册页和函数的行为可能有所不同。以下语句替换了手册页中的内容：如果 nmemb 或 size 为 0，则 calloc() 返回单个指针值，稍后可以将其成功传递给 free()。
+
+------------------------------------
+
+III.3. Parte 2 - Funciones adicionales
+
+En esta segunda parte, deberás desarrollar un conjunto de funciones que, o no son de la librería libc, o lo son pero de una forma distinta.
+在第二部分中，您将必须开发一组不是来自 libc 库的函数，或者它们是以不同的方式来自的。
+
+Algunas de las siguientes funciones pueden ser útiles para hacer las funciones de la parte 1.
+以下某些函数可能有助于执行第 1 部分中的函数。
+
+
+
+
+

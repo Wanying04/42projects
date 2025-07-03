@@ -1,0 +1,208 @@
+Push_swap
+Swap_push no suena tan natural
+Swap_push 听起来不太自然
+
+Resumen:
+En este proyecto ordenarás datos en un stack, con un conjunto limitado de instrucciones, y utilizando el menor número posible de acciones. Para tener éxito, deberás probar a utilizar varios tipos de algoritmos y elegir la solución más apropiada (de entre muchas posibles) para conseguir la ordenación optimizada de los datos.
+Versión: 8.3
+摘要：
+在本项目中，您将使用有限的指令集和尽可能少的操作对堆栈上的数据进行排序。为了成功，您需要尝试各种算法，并从众多可能的解决方案中选择最合适的解决方案，以实现最佳数据排序。
+版本：8.3
+
+Introducción
+Push_swap es un proyecto de algoritmia simple y muy efectivo: tienes que ordenar datos.
+Tienes a tu disposición un conjunto de valores enteros, 2 stacks y un conjunto de instrucciones para manipular ambos stacks.
+¿Cuál es tu objetivo? Escribir un programa en C llamado push_swap. El programa calculará y mostrará en la salida estándar el programa más pequeño, creado con las instrucciones de lenguaje Push swap, que ordene los números enteros recibidos como argumentos.
+¿A que es fácil?
+Bueno, eso ya lo veremos...
+简介
+Push_swap 是一个简单且非常有效的算法项目：您需要对数据进行排序。
+您有一组整数值、两个堆栈以及一组用于操作这两个堆栈的指令。
+您的目标是什么？编写一个名为 push_swap 的 C 程序。该程序将计算并使用 Push_swap 语言指令创建的最小程序，并在标准输出上显示，该程序对作为参数接收的整数进行排序。
+是不是很简单？
+好吧，我们拭目以待……
+
+Objetivos
+Escribir un algoritmo de ordenamiento es un paso crucial en el viaje de un desarrollador. Normalmente es el primer encuentro con el concepto de complejidad.
+Los algoritmos de ordenamiento y su complejidad suponen una parte importante de las preguntas realizadas durante las entrevistas laborales. Es posiblemente un buen momento para echar un vistazo a estos conceptos ya que tendrás que enfrentarte a ellos en algún momento de tu vida.
+Los objetivos de aprendizaje de este proyecto son rigor, uso de C, y el uso de algoritmos básicos... haciendo especial hincapié en su complejidad
+Ordenar valores es simple. Ordenarlos de forma rápida es menos simple, especialmente porque de una configuración de enteros a otra, la solución más eficiente para ordenar, puede diferir.
+目标
+编写排序算法是开发者旅程中至关重要的一步。这通常是第一次接触到复杂性这个概念。
+排序算法及其复杂性在面试题中占了很大一部分。现在或许是重新审视这些概念的好时机，因为你很可能会在人生的某个阶段遇到它们。
+本项目的学习目标是严谨性、C 语言的使用以及基本算法的使用……并特别强调它们的复杂性。
+对值进行排序很简单。快速排序则不那么简单，尤其是因为最有效的排序方案可能因整数配置而异。
+
+Instrucciones generales
+• Tu proyecto deberá estar escrito en C.
+• Tu proyecto debe estar escrito siguiendo la Norma. Si tienes archivos o funciones adicionales, estas están incluidas en la verificación de la Norma y tendrás un 0 si hay algún error de norma en cualquiera de ellos.
+• Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+• Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+• Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y por supuesto tu Makefile no debe hacer relink.
+• Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+• Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+• Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+• Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu programa funciona correctamente durante tu evaluación y la de otros compañeros.
+Y sí, tienes permitido utilizar estas pruebas durante tu evaluación o la de otros compañeros.
+• Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+一般说明
+• 您的项目必须使用 C 语言编写。
+• 您的项目必须遵循标准。如果您有其他文件或函数，这些文件或函数将包含在标准检查中，如果其中任何一个文件或函数包含任何标准错误，您将获得 0 分。
+• 您的函数不得意外终止（段错误、总线错误、重复释放等），除非出现未定义行为。如果发生这种情况，您的项目将被视为无法运行，并且您将在评估期间获得 0 分。
+• 所有在堆上分配的内存都必须在必要时正确释放。不允许出现内存泄漏。
+• 如果项目需要，您必须提交一个 Makefile，该文件会使用 -Wall、-Werror 和 -Wextra 标志将您的源文件编译为所需的输出，并使用 cc，当然，您的 Makefile 不得重新链接。
+• 您的 Makefile 必须至少包含 $(NAME)、all、clean、fclean 和 re 规则。
+• 要为您的项目提交奖励，您必须在 Makefile 中包含一条奖励规则，在该规则中添加项目主体部分中禁止使用的所有头文件、库或函数。奖励必须放在单独的 _bonus.{c/h} 文件中。强制部分和奖励将单独评估。
+• 如果您的项目允许使用 libft，您必须将其源代码和相关的 Makefile 复制到包含其对应 Makefile 的 libft 目录中。项目的 Makefile 必须先使用其 Makefile 编译库，然后再编译项目。
+• 我们建议您为您的项目创建测试程序，尽管这些程序不会被提交或评估。这将使您有机会在您和其他同事的评估过程中验证您的程序是否正常运行。
+是的，您可以在您或其他同事的评估过程中使用这些测试。
+• 将您的作品提交到您指定的 Git 仓库。只有您 Git 仓库中的作品才会被评估。如果 Deepthought 评估您的作品，它将在您的作品之后进行评估。如果在 Deepthought 评估过程中发现错误，则评估完成。
+
+Parte obligatoria
+V.1.
+Las reglas
+• Tienes 2 stacks, llamados a y b.
+• Para empezar:
+◦ El stack a contiene una cantidad aleatoria de números positivos y/o negativos.
+◦ El stack b está vacío.
+必修部分
+V.1.
+规则
+• 你有两个堆栈，分别称为 a 和 b。
+• 首先：
+◦ 堆栈 a 包含随机数量的正数和/或负数。
+◦ 堆栈 b 为空。
+
+• El objetivo es ordenar los números del stack a en orden ascendente. Para hacerlo tienes las siguientes operaciones a tu disposición:
+sa swap a: Intercambia los dos primeros elementos del stack a. No hace nada si hay uno o menos elementos.
+sb swap b: Intercambia los dos primeros elementos del stack b. No hace nada si hay uno o menos elementos.
+ss swap a y swap b a la vez.
+pa push a: Toma el primer elemento del stack b y lo pone el primero en el stack
+a. No hace nada si b está vacío.
+pb push b: Toma el primer elemento del stack a y lo pone el primero en el stack
+b. No hace nada si a está vacío.
+ra rotate a: Desplaza hacia arriba todos los elementos del stack a una posición, de forma que el primer elemento se convierte en el último.
+rb rotate b: Desplaza hacia arriba todos los elementos del stack b una posición, de forma que el primer elemento se convierte en el último.
+rr ra y rb al mismo tiempo.
+rra reverse rotate a: Desplaza hacia abajo todos los elementos del stack a una posición, de forma que el último elemento se convierte en el primero.
+rrb reverse rotate b: Desplaza hacia abajo todos los elementos del stack b una posición, de forma que el último elemento se convierte en el primero.
+rrr rra y rrb al mismo tiempo.
+• 目标是按升序对堆栈 a 中的数字进行排序。为此，你可以使用以下操作：
+sa 交换 a：交换堆栈 a 的前两个元素。如果堆栈 a 中元素少于或等于一个，则不执行任何操作。
+sb 交换 b：交换堆栈 b 的前两个元素。如果堆栈 b 中元素少于或等于一个，则不执行任何操作。
+ss 同时交换 a 和 b。
+pa 推送 a：从堆栈 b 中取出第一个元素，并将其放入堆栈 a 的首位。如果 b 为空，则不执行任何操作。
+pb 推送 b：从堆栈 a 中取出第一个元素，并将其放入堆栈 b 的首位。如果 a 为空，则不执行任何操作。
+ra 旋转 a：将堆栈中所有元素上移一位，使第一个元素成为最后一个。
+rb 旋转 b：将堆栈 b 中所有元素上移一位，使第一个元素成为最后一个。
+rr 同时执行 ra 和 rb。
+rra 反向旋转 a：将堆栈中所有元素下移一位，使最后一个元素成为第一个。
+rrb 反向旋转 b：将堆栈 b 中所有元素下移一位，使最后一个元素成为第一个。
+rrr 同时执行 rra 和 rrb。
+
+V.2.
+Ejemplo
+Para ilustrar el funcionamiento de algunas de estas instrucciones, vamos a ordenar una lista de números aleatoria. En el siguiente ejempo, asumiremos que ambos stacks crecen por la derecha.
+Este ejemplo ordena los enteros de a en 12 instrucciones. ¿Puedes hacerlo mejor?
+V.2.
+示例
+为了说明其中一些指令的工作原理，让我们对一个随机数字列表进行排序。在下面的示例中，我们假设两个堆栈都从右侧增长。
+此示例用 12 条指令对从 a 到 b 的整数进行排序。你能做得更好吗？
+
+V.3.
+El programa: “push_swap”
+(Tabla)
+Tu programa deberá cumplir la siguientes normas:
+• Tienes que entregar un Makefile que compile tus archivos fuente. No debe hacer relink.
+• Las variables globales están prohibidas.
+• Debes escribir un programa llamado push_swap que recibirá como argumento el stack a con el formato de una lista de enteros. El primer argumento debe ser el que esté encima del stack (cuidado con el orden).
+• El programa debe mostrar la lista de instrucciones más corta posible para ordenar el stack a, de menor a mayor, donde el número menor se sitúe en la cima del stack.
+• Las instrucciones deben separarse utilizando un “\n” y nada más.
+• El objetivo es ordenar el stack con el mínimo número de operaciones posible. Durante la evaluación compararemos el número de instrucciones obtenido por tu programa con un rango de instrucciones máximo. Si tu programa muestra una lista demasiado larga o si el resultado no es correcto, tu nota será 0.
+• Si no se especifican parámetros, el programa no deberá mostrar nada y deberá devolver el control al usuario.
+• En caso de error, deberá mostrar Error seguido de un “\n” en la salida de errores estándar. Algunos de los posibles errores son: argumentos que no son enteros, argumentos superiores a un número entero, y/o encontrar números duplicados.
+Durante la evaluación tendrás a tu disposición un binario para verificar el correcto funcionamiento de tu programa. Funciona de la siguiente forma:
+Si el programa checker_OS muestra "KO", implicará que tu programa push_swap utiliza una lista de instrucciones que no ordena los números.
+V.3.
+程序：“push_swap”
+（表格）
+你的程序必须遵循以下规则：
+• 你必须提交一个能够编译源文件的 Makefile。它不能重新链接。
+• 禁止使用全局变量。
+• 你必须编写一个名为 push_swap 的程序，该程序将以整数列表的形式接收堆栈 a 作为参数。第一个参数必须是堆栈顶部的参数（注意顺序）。
+• 程序必须显示尽可能短的指令列表，以便对堆栈 a 从低到高进行排序，最小的数字位于堆栈顶部。
+• 指令之间必须用“\n”分隔，不能有其他分隔符。
+• 目标是用尽可能少的操作数对堆栈进行排序。在评估过程中，我们会将程序获得的指令数与最大指令范围进行比较。如果程序显示的列表过长或结果不正确，则得分为 0。
+• 如果未指定任何参数，程序不应显示任何内容，并将控制权返回给用户。
+• 如果发生错误，程序应在标准错误输出中显示 Error，后跟“\n”。可能的错误包括：参数不是整数、参数大于整数以及/或者找到重复的数字。
+在评估过程中，您将获得一个二进制文件来验证程序的正确运行。其工作原理如下：
+如果 checker_OS 程序显示“KO”，则表示您的 push_swap 程序使用了未对数字进行排序的指令列表。
+
+El programa checker_OS está disponible en los recursos del proyecto, en la Intranet.
+Puedes encontrar su funcionamiento descrito en la sección Parte bonus de este documento.
+checker_OS 程序可在内网的项目资源中找到。
+您可以在本文档的“奖励部分”部分找到其操作说明。
+
+V.4.
+Pruebas de rendimiento
+Para validar este proyecto, deberás realizar ciertas pruebas con un número mínimo de operaciones:
+• Para una validación mínima del proyecto (que implica una nota mínima de 80), deberás ser capaz de ordenar 100 números aleatorios en menos de 700 operaciones.
+• Para una validación máxima del proyecto y así poder obtener los bonus, deberás cumplir el primer paso anterior, pero también para 500 números aleatorios, no deberás superar las 5500 operaciones.
+Todo esto será verificado durante la evaluación.
+V.4.
+性能测试
+为了验证此项目，您必须执行以下测试，并设定最低操作次数：
+• 最低项目验证（最低分数要求为 80 分）要求您必须能够在少于 700 次操作内对 100 个随机数进行排序。
+• 为了获得最高项目验证并有资格获得奖励，您必须完成上述第一步，并且对于 500 个随机数，您的操作次数不得超过 5,500 次。
+所有这些都将在评估期间进行验证。
+
+Si deseas completar la parte bonus, deberás validar el proyecto con cada paso de esta prueba de rendimiento, obteniendo la puntuación más alta posible.
+如果您想完成奖励部分，您必须使用此性能测试的每一步来验证项目，并尽可能获得最高分数。
+
+Parte bonus
+Este proyecto deja muy poco margen para añadir funcionalidades extra debido a su simplicidad. Sin embargo, ¿qué te parece crear tu propio checker?
+奖励部分
+由于项目本身很简单，几乎没有添加额外功能的空间。但是，您可以创建自己的检查程序吗？
+
+Gracias al programa checker podrás probar si la lista de instrucciones generada por el programa push_swap realmente ordena el stack de forma correcta.
+使用检查程序，您可以测试 push_swap 程序生成的指令列表是否能够正确对堆栈进行排序。
+
+La parte bonus no será evaluada si la parte obligatoria no está perfecta. Perfecta quiere decir que se ha completado la parte obligatoria y que funciona perfectamente, sin errores. En este proyecto esto implica validar todos las pruebas de rendimiento sin excepción. Si no has pasado todas las pruebas obligatorias, tu parte bonus no será evaluada.
+如果强制部分不完善，则不会评估奖励部分。完美意味着强制性部分已完成且运行良好，没有错误。在本项目中，这意味着所有性能测试均已通过，且无任何异常。如果您未通过所有强制性测试，您的加分部分将不会被评估。
+
+VI.1.
+El programa “checker”
+(Tabla)
+• Escribe un programa llamado checker, que tome como argumento el stack a en forma de una lista de enteros. El primer argumento debe estar encima del stack (cuidado con el orden). Si no se da argumento, checker termina y no muestra nada.
+• Durante la ejecución de checker se esperará y leerá una lista de instrucciones, separadas utilizando ’\n’. Cuando todas las instrucciones se hayan leído, checker las ejecutará utilizando el stack recibido como argumento.
+• Si tras ejecutar todas las instrucciones, el stack a está ordenado y el stack b vacío, entonces el programa checker mostrará “OK” seguido de un ’\n’ en el stdout.
+• En cualquier otro caso, deberá mostrar “KO” seguido de un ’\n’ en el stdout.
+• En caso de error, deberás mostrar Error seguido de un ’\n’ en la stderr. Los errores incluyen, por ejemplo, algunos o todos los argumentos no son enteros, algunos o todos los argumentos son más grandes que un número entero, hay duplicados, una instrucción no existe y/o no tiene el formato correcto.
+VI.1.
+“检查器”程序
+（表格）
+• 编写一个名为 checker 的程序，该程序以整数列表的形式接收堆栈 a 作为参数。第一个参数必须位于堆栈顶部（注意顺序）。如果没有参数，checker 将终止且不显示任何内容。
+• 在 checker 执行期间，将等待并读取以“\n”分隔的指令列表。读取所有指令后，checker 将使用接收到的堆栈作为参数执行这些指令。
+• 如果执行完所有指令后，堆栈 a 已排序且堆栈 b 为空，则 checker 程序将在标准输出 (stdout) 上显示“OK”，后跟“\n”。
+• 否则，它应在标准输出 (stdout) 上显示“KO”，后跟“\n”。
+• 如果发生错误，则应在标准错误输出 (stderr) 上显示“Error”，后跟“\n”。错误包括：部分或所有参数不是整数、部分或所有参数大于整数、存在重复、指令不存在以及/或者格式不正确。
+
+No tienes que clonar exactamente el comportamiento exacto del binario que te damos. Es obligatorio gestionar errores pero es decisión tuya cómo gestionar los argumentos.
+您不必克隆我们提供的二进制文件的完全相同的行为。错误处理是强制性的，但如何处理参数由您决定。
+
+Tus bonus serán evaluados exclusivamente si la parte obligatoria está PERFECTA. Perfecta quiere decir que se ha completado la parte obligatoria y que funciona perfectamente, sin errores. Si no has completado todos los requisitos de la parte obligatoria, la parte bonus no será evaluada.
+只有当强制性部分达到“完美”状态时，您的奖励才会被评估。“完美”意味着强制性部分完整且运行良好，没有错误。如果您未完成强制性部分的所有要求，则奖励部分将不予评估。
+
+Entrega y evaluación
+Entrega tu trabajo en tu repositorio git como de costumbre. Solo el trabajo en tu repositorio será evaluado. No dudes en comprobar los nombres de tus archivos para asegurarte de que son correctos.
+Ya que este proyecto no será verificado por un programa, siéntete libre de organizar como quieras tus ficheros, siempre que entregues todos los archivos obligatorios y que cumplan con las reglas especificadas.
+¡Buena suerte!
+提交和评估
+像往常一样将您的工作提交到您的 Git 仓库。只有您仓库中的工作才会被评估。请检查您的文件名以确保其正确无误。
+由于此项目不会通过程序验证，因此您可以随意组织您的文件，只要您提交了所有强制性文件并且它们符合指定的规则即可。
+祝您好运！
+
+
+
+
+
