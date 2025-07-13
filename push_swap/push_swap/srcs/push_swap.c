@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:56:20 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/10 17:48:02 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/13 16:58:02 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,42 @@ void	ft_sort_array(int *arr, int size)
 	int	i;
 	int	j;
 	int	min_idx;
+	int	temp;
 
 	i = 0;
 	while (i < size - 1)
 	{
 		min_idx = i;
+		j = i + 1;
 		while (j < size)
 		{
-			j = i + 1;
 			if (arr[j] < arr[min_idx])
 				min_idx = j;
 				j++;
 		}
+		temp = arr[i];
+		arr[i] = arr[min_idx];
+		arr[min_idx] = temp;
+		i++;
 	}
 }
 
-void	assign_index(t_stack **stack_a)
+void	ft_assign_index(t_stack **stack_a)
 {
 	int	size;
 	int	*values;
 	t_stack	*tmp;
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	size = stack_size(*stack_a);
 	if (size == 0)
 		return;
 	values = malloc(size * sizeof(int));
+	if (!values)
+		return;
 	tmp = *stack_a;
 	while (i < size)
 	{
@@ -55,29 +64,25 @@ void	assign_index(t_stack **stack_a)
 	tmp = *stack_a;
 	while (tmp)
 	{
-		while (i < size)
+		while (j < size)
 		{
-			if (values[i] == tmp->value)
+			if (values[j] == tmp->value)
 			{
-				tmp->index = i + 1;
+				tmp->index = j + 1;
 				break;
 			}
+			j++;
 		}
 		tmp = tmp->next;
 	}
 	free (values);
 }
 
-void	push_swap(int *stack_a, int *stack_b)
+int	ft_parse_arguments(int ac, char **av, t_stack **stack)
 {
-
-}
-
-t_stack parse_arguments(int ac, char **av)
-{
-	t_stack	*stack;
 	long	num;
 	int	*nums;
+	int	i;
 
 	stack = NULL;
 	while (i < ac)
@@ -97,39 +102,4 @@ t_stack parse_arguments(int ac, char **av)
 		write(2, "Error\n", 6);
 		return (1);
 	}
-}
-
-int	main(int ac, char *av[])
-{
-	int	i;
-	int	*nums;
-	t_stack	*stack_a;
-	t_stack	*stack_b;
-
-	i = 1;
-	stack_a = NULL;
-	stack_a = NULL;
-	if (ac == 1)
-		return (0);
-	nums = malloc((ac - 1) * sizeof(int));
-	if (!nums)
-	{
-		write(2, "Error\n", 6);
-		return (1);
-	}
-	
-	stack_a = parse_arguments(ac, av);
-	if (!stack_a)
-	{
-		write(2, "Error\n", 6);
-		return (1);
-	}
-	if (!is_sorted(stack_a))
-	{
-		push_swap(&stack_a, &stack_b);
-	}
-	free (&stack_a);
-	free (&stack_b);
-	free (nums);
-	return (0);
 }
