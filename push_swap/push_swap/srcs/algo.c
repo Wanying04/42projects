@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:15:31 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/13 14:13:16 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/13 17:12:38 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	ft_sort_2(t_stack *stack_a)         //sort 2 elements
 
 void	ft_sort_3(t_stack *stack_a)         //sort 3 elements
 {
-	
+	if ((*stack_a)->index == 3)
+		 sa(a);
 }
 
 void	push_swap(t_stack **stack_a, t_stack **stack_b)
