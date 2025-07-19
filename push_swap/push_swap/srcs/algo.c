@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:15:31 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/13 17:12:38 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/19 20:58:40 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,17 @@ void	ft_sort_2(t_stack *stack_a)         //sort 2 elements
 	int	temp;
 	
 	if (stack_a->value > stack_a->next->value)
-	{
-		temp = stack_a->value;
-		stack_a->value = stack_a->next->value;
-		stack_a->next->value = temp;
-		write(1, "sa", 2);	
-	}
-	write(1, "\n", 1);
+		sa(stack_a);
 }
 
 void	ft_sort_3(t_stack *stack_a)         //sort 3 elements
 {
-	if ((*stack_a)->index == 3)
-		 sa(a);
+	if (stack_a->index == 3)
+		ra(stack_a);
+	if (stack_a->next->index == 3)
+		rra(stack_a);
+	if (stack_a->index > stack_a->next->index)
+		sa(stack_a);
 }
 
 void	push_swap(t_stack **stack_a, t_stack **stack_b)
