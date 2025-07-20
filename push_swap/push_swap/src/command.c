@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 17:13:05 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/19 20:54:52 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/20 20:53:55 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	sa(t_stack **stack_a)
 	t_stack	*first;
 	t_stack	*second;
 	
+	// if (!stack_a || !*stack_a || !(*stack_a)->next)
+    //     return;
 	if (*stack_a == NULL || (*stack_a)->next == NULL)
 		return;       //When the stack is empty or has only one element, no swapping is required
 	first = *stack_a;

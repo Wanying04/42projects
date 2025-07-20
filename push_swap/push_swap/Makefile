@@ -6,7 +6,7 @@
 #    By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/10 15:56:47 by wtang             #+#    #+#              #
-#    Updated: 2025/07/10 15:56:48 by wtang            ###   ########.fr        #
+#    Updated: 2025/07/20 13:06:12 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ INCLUDES = -Ilibft
 LDFLAGS = -Llibft
 LDLIBS = -lft
 
-SRC = src/push_swap.c
+SRC_DIR = src
+SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:.c=.o)
 
 RM = rm -f

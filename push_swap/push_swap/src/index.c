@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   index.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/10 15:56:20 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/13 16:58:02 by wtang            ###   ########.fr       */
+/*   Created: 2025/07/20 19:50:56 by wtang             #+#    #+#             */
+/*   Updated: 2025/07/20 20:58:58 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,26 @@ void	ft_sort_array(int *arr, int size)
 		{
 			if (arr[j] < arr[min_idx])
 				min_idx = j;
-				j++;
+			j++;
 		}
 		temp = arr[i];
 		arr[i] = arr[min_idx];
 		arr[min_idx] = temp;
 		i++;
 	}
+}
+
+// 计算栈中元素的数量
+int stack_size(t_stack *stack)
+{
+    int count = 0;
+    
+    while (stack != NULL)
+    {
+        count++;
+        stack = stack->next;
+    }
+    return (count);
 }
 
 void	ft_assign_index(t_stack **stack_a)
@@ -47,9 +60,9 @@ void	ft_assign_index(t_stack **stack_a)
 
 	i = 0;
 	j = 0;
-	size = stack_size(*stack_a);
-	if (size == 0)
+	if (!stack_a || !*stack_a)
 		return;
+	size = stack_size(*stack_a);
 	values = malloc(size * sizeof(int));
 	if (!values)
 		return;
@@ -64,6 +77,7 @@ void	ft_assign_index(t_stack **stack_a)
 	tmp = *stack_a;
 	while (tmp)
 	{
+		j = 0;
 		while (j < size)
 		{
 			if (values[j] == tmp->value)
@@ -76,30 +90,4 @@ void	ft_assign_index(t_stack **stack_a)
 		tmp = tmp->next;
 	}
 	free (values);
-}
-
-int	ft_parse_arguments(int ac, char **av, t_stack **stack)
-{
-	long	num;
-	int	*nums;
-	int	i;
-
-	stack = NULL;
-	while (i < ac)
-	{
-		if (!ft_is_number(av[i]) || !ft_is_int(av[i]))
-		{
-			free (nums);
-			write(2, "Error\n", 6);
-			return (1);
-		}
-		nums[i - 1] = ft_atoi(av[i]);
-		i++;
-	}
-	if (ft_has_duplicates(nums, ac - 1))
-	{
-		free (nums);
-		write(2, "Error\n", 6);
-		return (1);
-	}
 }
