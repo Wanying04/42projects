@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:05:43 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/20 21:19:31 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/22 20:23:54 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,47 @@ int get_current_pos(t_stack *stack, t_stack *node)
 
 int find_target_pos(t_stack *a, int value)
 {
-    int pos = 0;
+    if (!a)
+        return 0;
+
     t_stack *tmp = a;
-    
-    while (tmp->next && !(value > tmp->value && value < tmp->next->value)) {
-        pos++;
-        tmp = tmp->next;
+    int pos = 0;
+ 
+
+    // 先找最小和最大值及其位置
+    int min_value = tmp->value;
+    int max_value = tmp->value;
+    int min_pos = 0;
+    int i = 0;
+    for (t_stack *cur = a; cur; cur = cur->next, i++) {
+        if (cur->value < min_value) {
+            min_value = cur->value;
+            min_pos = i;
+        }
+        if (cur->value > max_value) {
+            max_value = cur->value;
+        }
     }
-    return (tmp->next) ? pos + 1 : 0;
+
+    // 如果 value 小于最小值 或 大于最大值，目标是最小值的位置（插入前面）
+    if (value < min_value || value > max_value)
+        return min_pos;
+
+    // 否则，找到第一个 tmp 和 tmp->next，满足 value > tmp->value && value < tmp->next->value
+    tmp = a;
+    pos = 0;
+    while (tmp->next)
+    {
+        if (value > tmp->value && value < tmp->next->value)
+            return pos + 1;
+        tmp = tmp->next;
+        pos++;
+    }
+
+    // 如果没找到，返回0（栈顶部）
+    return 0;
 }
+
 
 int calculate_rotation_cost(int pos, int stack_size)
 {
@@ -61,12 +93,27 @@ int ft_min(int a, int b)
     return (a < b) ? a : b;
 }
 
+int ft_max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
+
+
 int calculate_push_cost(t_stack *a, t_stack *b, t_stack *node, int target_pos)
 {
-    int cost_a = calculate_rotation_cost(target_pos, stack_size(a));
-    int cost_b = calculate_rotation_cost(get_current_pos(b, node), stack_size(b));
-    return cost_a + cost_b - ft_min(cost_a, cost_b);
+    int size_a = stack_size(a);
+    int size_b = stack_size(b);
+    int pos_b = get_current_pos(b, node);
+
+    int cost_a = calculate_rotation_cost(target_pos, size_a);
+    int cost_b = calculate_rotation_cost(pos_b, size_b);
+
+    if ((cost_a > 0 && cost_b > 0) || (cost_a < 0 && cost_b < 0))
+        return ft_max(abs(cost_a), abs(cost_b));
+    else
+        return abs(cost_a) + abs(cost_b);
 }
+
 
 void copy_stack_to_array(t_stack *stack, int *arr)
 {
@@ -91,16 +138,22 @@ void rrr(t_stack **a, t_stack **b) {
 
 void execute_dual_rotation(t_stack **a, t_stack **b, int rotate_a, int rotate_b)
 {
-    while (rotate_a > 0 && rotate_b > 0) {
-        rr(a, b);
-        rotate_a--;
-        rotate_b--;
-    }
-    while (rotate_a < 0 && rotate_b < 0) {
-        rrr(a, b);
-        rotate_a++;
-        rotate_b++;
-    }
+    while (rotate_a > 0) {
+    	ra(a);
+    	rotate_a--;
+	}
+	while (rotate_a < 0) {
+   		rra(a);
+    	rotate_a++;
+	}
+	while (rotate_b > 0) {
+  	  rb(b);
+  	  rotate_b--;
+	}
+	while (rotate_b < 0) {
+  	  rrb(b);
+  	  rotate_b++;
+	}
     while (rotate_a-- > 0) ra(a);
     while (rotate_a++ < 0) rra(a);
     while (rotate_b-- > 0) rb(b);
@@ -122,7 +175,8 @@ void find_optimal_push(t_stack **a, t_stack **b)
         if (cost < min_cost) {
             min_cost = cost;
             best_rotate_a = (target_pos <= stack_size(*a)/2) ? target_pos : target_pos - stack_size(*a);
-            best_rotate_b = get_current_pos(*b, current);
+            int pos_b = get_current_pos(*b, current);
+			best_rotate_b = (pos_b <= stack_size(*b)/2) ? pos_b : pos_b - stack_size(*b);
         }
         current = current->next;
     }
@@ -166,7 +220,7 @@ void ft_sort_int_array(int *arr, int size)
     ft_sort_int_array(arr + i, size - i);
 }
 
-static void push_chunks_to_b(t_stack **a, t_stack **b, int chunks)
+void push_chunks_to_b(t_stack **a, t_stack **b, int chunks)
 {
     int size = stack_size(*a);
     int items_per_chunk = size / chunks;
@@ -198,7 +252,17 @@ void final_rotate(t_stack **a)
     if (min_pos <= size/2)
         while (min_pos--) ra(a);
     else
-        while (min_pos++ < size) rra(a);
+        if (min_pos <= size / 2)
+		{
+  		  while (min_pos-- > 0)
+        	ra(a);
+		}
+		else
+		{
+    		int rotate = size - min_pos;
+   	 		while (rotate-- > 0)
+        		rra(a);
+		}
 }
 
 int find_min_position(t_stack *a)
@@ -218,17 +282,19 @@ int find_min_position(t_stack *a)
     return min_pos;
 }
 
+
+
 void ft_sort_more(t_stack **a, t_stack **b)
 {
-    int size = stack_size(*a);
-    int chunks = (size > 100) ? 5 : 3;
-    
-    push_chunks_to_b(a, b, chunks);
-    if (!ft_is_sorted(*a))
-        ft_sort_3(a);
-    while (*b) {
-        find_optimal_push(a, b);
-        pa(a, b);
-    }
-    final_rotate(a);
+	int size = stack_size(*a);
+	int chunks = (size > 100) ? 5 : 3;
+	
+	push_chunks_to_b(a, b, chunks);
+	if (!ft_is_sorted(*a))
+		ft_sort_3(a);
+	while (*b) {
+		find_optimal_push(a, b);
+		pa(a, b);
+	}
+	final_rotate(a);
 }

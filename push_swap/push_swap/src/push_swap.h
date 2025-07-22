@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:56:39 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/20 21:15:38 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/22 19:53:47 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	rb(t_stack **stack_b);
 void	rra(t_stack **stack_a);
 void	rrb(t_stack **stack_b);
 int	ft_parse_arguments(int ac, char **av, t_stack **stack);
-int	ft_is_number(char *s);
-int	ft_is_int(char *s);
+int	ft_is_valid_int(char *s);
 int	ft_has_duplicates(int *nums, int size);
 t_stack *ft_create_stack(int *nums, int size);
 int ft_stack_push(t_stack **stack, int value);

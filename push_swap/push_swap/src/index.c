@@ -6,11 +6,24 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:50:56 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/20 20:58:58 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/21 16:56:59 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	stack_size(t_stack *stack)
+{
+	int	count;
+	
+	count = 0;
+	while (stack != NULL)
+	{
+		count++;
+		stack = stack->next;
+	}
+	return (count);
+}
 
 void	ft_sort_array(int *arr, int size)
 {
@@ -30,24 +43,14 @@ void	ft_sort_array(int *arr, int size)
 				min_idx = j;
 			j++;
 		}
-		temp = arr[i];
-		arr[i] = arr[min_idx];
-		arr[min_idx] = temp;
+		if (min_idx != i)
+		{
+			temp = arr[i];
+			arr[i] = arr[min_idx];
+			arr[min_idx] = temp;
+		}
 		i++;
 	}
-}
-
-// 计算栈中元素的数量
-int stack_size(t_stack *stack)
-{
-    int count = 0;
-    
-    while (stack != NULL)
-    {
-        count++;
-        stack = stack->next;
-    }
-    return (count);
 }
 
 void	ft_assign_index(t_stack **stack_a)

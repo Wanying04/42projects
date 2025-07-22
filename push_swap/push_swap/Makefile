@@ -6,7 +6,7 @@
 #    By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/10 15:56:47 by wtang             #+#    #+#              #
-#    Updated: 2025/07/20 13:06:12 by wtang            ###   ########.fr        #
+#    Updated: 2025/07/21 17:20:48 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 LIBFT = libft/libft.a
-INCLUDES = -Ilibft
+INCLUDES = -Ilibft -Isrc
 LDFLAGS = -Llibft
 LDLIBS = -lft
 
