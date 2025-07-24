@@ -6,23 +6,53 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:50:56 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/21 16:56:59 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/24 15:56:32 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	stack_size(t_stack *stack)
+static int	*ft_get_sorted_array(t_stack *stack, int size)
 {
-	int	count;
-	
-	count = 0;
-	while (stack != NULL)
+	int		*arr;
+	int		i;
+	t_stack	*tmp;
+
+	arr = malloc(size * sizeof(int));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	tmp = stack;
+	while (i < size)
 	{
-		count++;
-		stack = stack->next;
+		arr[i] = tmp->value;
+		tmp = tmp->next;
+		i++;
 	}
-	return (count);
+	ft_sort_array(arr, size);
+	return (arr);
+}
+
+static void	ft_set_indexes(t_stack **stack, int *sorted_array, int size)
+{
+	t_stack	*tmp;
+	int		j;
+
+	tmp = *stack;
+	while (tmp)
+	{
+		j = 0;
+		while (j < size)
+		{
+			if (sorted_array[j] == tmp->value)
+			{
+				tmp->index = j + 1;
+				break ;
+			}
+			j++;
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	ft_sort_array(int *arr, int size)
@@ -55,42 +85,15 @@ void	ft_sort_array(int *arr, int size)
 
 void	ft_assign_index(t_stack **stack_a)
 {
-	int	size;
-	int	*values;
-	t_stack	*tmp;
-	int	i;
-	int	j;
+	int		size;
+	int		*sorted_array;
 
-	i = 0;
-	j = 0;
 	if (!stack_a || !*stack_a)
-		return;
+		return ;
 	size = stack_size(*stack_a);
-	values = malloc(size * sizeof(int));
-	if (!values)
-		return;
-	tmp = *stack_a;
-	while (i < size)
-	{
-		values[i] = tmp->value;
-		tmp = tmp->next;
-		i++;
-	}
-	ft_sort_array(values, size);
-	tmp = *stack_a;
-	while (tmp)
-	{
-		j = 0;
-		while (j < size)
-		{
-			if (values[j] == tmp->value)
-			{
-				tmp->index = j + 1;
-				break;
-			}
-			j++;
-		}
-		tmp = tmp->next;
-	}
-	free (values);
+	sorted_array = ft_get_sorted_array(*stack_a, size);
+	if (!sorted_array)
+		return ;
+	ft_set_indexes(stack_a, sorted_array, size);
+	free(sorted_array);
 }

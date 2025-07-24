@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:56:39 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/22 19:53:47 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/23 22:05:46 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "libft.h"
+
+//DEBUG
+#include <stdio.h>
 
 typedef struct s_stack
 {
@@ -58,7 +61,7 @@ int find_target_pos(t_stack *a, int value);
 int find_min_position(t_stack *a);
 int calculate_rotation_cost(int pos, int stack_size);
 int ft_min(int a, int b);
-int calculate_push_cost(t_stack *a, t_stack *b, t_stack *node, int target_pos);
+int calculate_push_cost(int pos_a, int pos_b);
 void copy_stack_to_array(t_stack *stack, int *arr);
 void rr(t_stack **a, t_stack **b);
 void rrr(t_stack **a, t_stack **b);

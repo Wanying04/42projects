@@ -6,11 +6,24 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:44:25 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/22 20:05:46 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/24 16:34:35 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	stack_size(t_stack *stack)
+{
+	int	count;
+
+	count = 0;
+	while (stack != NULL)
+	{
+		count++;
+		stack = stack->next;
+	}
+	return (count);
+}
 
 void	ft_free_stack(t_stack **stack)
 {
@@ -36,10 +49,11 @@ int	ft_stack_push(t_stack **stack, int value)
 	*stack = new_node;
 	return (0);
 }
+
 t_stack	*ft_create_stack(int *nums, int size)
 {
 	t_stack	*stack;
-	int	i;
+	int		i;
 
 	stack = NULL;
 	i = size - 1;
@@ -54,4 +68,3 @@ t_stack	*ft_create_stack(int *nums, int size)
 	}
 	return (stack);
 }
-
