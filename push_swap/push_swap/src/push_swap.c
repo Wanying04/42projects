@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:15:31 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/24 16:33:38 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/25 20:40:39 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,37 +33,46 @@ void	ft_sort_2(t_stack **stack)
 		sa(stack);
 }
 
-void ft_sort_3(t_stack **stack_a)
+void	ft_sort_3(t_stack **stack_a)
 {
-	int top;
-	int mid;
-	int bot;
-
 	if (!stack_a || !*stack_a || !(*stack_a)->next || !(*stack_a)->next->next)
 		return ;
-
-	top = (*stack_a)->value;
-	mid = (*stack_a)->next->value;
-	bot = (*stack_a)->next->next->value;
-
-	if (top < mid && mid < bot)
-		return ;
-	if (top > mid && mid < bot && top < bot)
-		sa(stack_a);
-	else if (top > mid && mid > bot)
-	{
-		sa(stack_a);
-		rra(stack_a);
-	}
-	else if (top > mid && mid < bot)
+	if ((*stack_a)->value > (*stack_a)->next->value
+		&& (*stack_a)->value > (*stack_a)->next->next->value)
 		ra(stack_a);
-	else if (top < mid && mid > bot)
-	{
+	else if ((*stack_a)->next->value > (*stack_a)->value
+		&& (*stack_a)->next->value > (*stack_a)->next->next->value)
 		rra(stack_a);
+	if ((*stack_a)->value > (*stack_a)->next->value)
 		sa(stack_a);
+}
+
+void	ft_sort_more(t_stack **a, t_stack **b)
+{
+	int	size;
+	int	managed;
+
+	size = stack_size(*a);
+	managed = 0;
+	if (!a || !*a)
+		return ;
+	while (managed < size && *a)
+	{
+		if ((*a)->index <= size / 2)
+			pb(a, b);
+		else
+			ra(a);
+		managed++;
 	}
-	else
-		rra(stack_a);
+	while (stack_size(*a) > 3 && *a)
+		pb(a, b);
+	ft_sort_3(a);
+	while (*b)
+	{
+		find_optimal_push(a, b);
+		pa(a, b);
+	}
+	final_rotate(a);
 }
 
 void	push_swap(t_stack **stack_a, t_stack **stack_b)

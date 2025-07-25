@@ -6,34 +6,13 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:50:56 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/24 15:56:32 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/25 22:37:26 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	*ft_get_sorted_array(t_stack *stack, int size)
-{
-	int		*arr;
-	int		i;
-	t_stack	*tmp;
-
-	arr = malloc(size * sizeof(int));
-	if (!arr)
-		return (NULL);
-	i = 0;
-	tmp = stack;
-	while (i < size)
-	{
-		arr[i] = tmp->value;
-		tmp = tmp->next;
-		i++;
-	}
-	ft_sort_array(arr, size);
-	return (arr);
-}
-
-static void	ft_set_indexes(t_stack **stack, int *sorted_array, int size)
+void	ft_set_indexes(t_stack **stack, int *sorted_array, int size)
 {
 	t_stack	*tmp;
 	int		j;
@@ -81,6 +60,27 @@ void	ft_sort_array(int *arr, int size)
 		}
 		i++;
 	}
+}
+
+int	*ft_get_sorted_array(t_stack *stack, int size)
+{
+	int		*arr;
+	int		i;
+	t_stack	*tmp;
+
+	arr = malloc(size * sizeof(int));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	tmp = stack;
+	while (i < size)
+	{
+		arr[i] = tmp->value;
+		tmp = tmp->next;
+		i++;
+	}
+	ft_sort_array(arr, size);
+	return (arr);
 }
 
 void	ft_assign_index(t_stack **stack_a)
