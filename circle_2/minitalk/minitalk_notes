@@ -1,0 +1,147 @@
+Minitalk
+
+Resumen: El propósito de este proyecto es crear un pequeño programa de intercambio de datos utilizando señales UNIX.
+
+摘要：本项目旨在创建一个使用 UNIX 信号进行数据交换的小型程序。
+
+Instrucciones generales
+
+通用说明
+
+• Tu proyecto deberá estar escrito en C.
+• Tu proyecto debe estar escrito siguiendo la Norma. Si tienes archivos o funciones adicionales, estas están incluidas en la verificación de la Norma y tendrás un 0 si hay algún error de norma en cualquiera de ellos.
+• Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+• Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+• Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y por supuesto tu Makefile no debe hacer relink.
+• Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+• Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+• Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+• Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu programa funciona correctamente durante tu evaluación y la de otros compañeros.
+Y sí, tienes permitido utilizar estas pruebas durante tu evaluación o la de otros compañeros.
+• Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+
+• 您的项目必须使用 C 语言编写。
+• 您的项目必须遵循标准。如果您有其他文件或函数，这些文件或函数将包含在标准检查中，如果其中任何一个文件或函数存在任何标准错误，您将收到 0 分。
+• 您的函数不得意外终止（段错误、总线错误、双重释放等），除非出现未定义行为的情况。如果发生这种情况，您的项目将被视为无法运行，并且在评估期间您将收到 0 分。
+• 所有在堆中分配的内存都必须在必要时正确释放。不允许出现内存泄漏。
+• 如果项目需要，您必须提交一个 Makefile，该文件会使用 -Wall、-Werror 和 -Wextra 标志将您的源文件编译为所需的输出。您必须使用 cc，当然，您的 Makefile 不能重新链接。
+• 您的 Makefile 必须至少包含 $(NAME)、all、clean、fclean 和 re 规则。
+• 要为您的项目提交奖励，您必须在 Makefile 中包含一条奖励规则，在该规则中添加项目主体部分中禁止的所有头文件、库或函数。奖励必须放在单独的 _bonus.{c/h} 文件中。强制部分和奖励部分将分别评估。
+• 如果您的项目允许使用 libft，您必须将其源代码和相关的 Makefile 复制到包含其对应 Makefile 的 libft 目录中。项目的 Makefile 必须首先使用其 Makefile 编译库，然后再编译项目。
+• 我们鼓励您为您的项目创建测试程序，尽管这项工作不会被提交或评估。这将使您有机会在您和其他同事的评估过程中验证您的程序是否正常运行。
+是的，您可以在您或其他同事的评估过程中使用这些测试。
+• 将您的工作提交到您指定的 Git 存储库。只有您 Git 存储库中的工作才会被审核。如果 Deepthought 审查你的工作，它会在你的同事之后进行。如果 Deepthought 在审查过程中发现错误，则审查完成。
+
+Instrucciones específicas
+
+具体说明
+
+• Los ejecutables deben llamarse client y server.
+• Deberás proporcionar un archivo Makefile, que compilará los archivos fuente de tu programa. No deberá hacer relink.
+• Puedes usar tu libft.
+• Debes gestionar los errores con cuidado. Bajo ninguna circunstancia tu programa puede terminar inesperadamente (segfault, bus error, double free, etc).
+• Tu programa no puede tener leaks de memoria.
+• Puedes utilizar una variable global por programa (una para el cliente y otra para el servidor), pero tendrás que justificar su uso.
+• En la parte obligatoria se te permite utilizar las siguientes funciones:
+◦ write
+◦ ft_printf y cualquier equivalente que TÚ hayas programado
+◦ signal
+◦ sigemptyset
+◦ sigaddset
+◦ sigaction
+◦ kill
+◦ getpid
+◦ malloc
+◦ free
+◦ pause
+◦ sleep
+◦ usleep
+◦ exit
+
+• 可执行文件必须分别命名为客户端和服务器。
+• 你必须提供一个 Makefile，用于编译程序的源文件。该文件不得重新链接。
+• 你可以使用你的 libft。
+• 你必须谨慎处理错误。在任何情况下，你的程序都不能意外终止（段错误、总线错误、双重释放等）。
+• 你的程序不能有内存泄漏。
+• 每个程序可以使用一个全局变量（一个用于客户端，一个用于服务器），但你必须证明其使用的合理性。
+• 在必选部分，您可以使用以下函数：
+◦ write
+◦ ft_printf 以及您编写的任何等效函数
+◦ signal
+◦ sigemptyset
+◦ sigaddset
+◦ sigaction
+◦ kill
+◦ getpid
+◦ malloc
+◦ free
+◦ pause
+◦ sleep
+◦ usleep
+◦ exit
+
+Parte obligatoria
+
+必选部分
+
+• Debes crear un programa de comunicación en la forma de un cliente y un servidor.
+• El servidor debe lanzarse primero, tras lanzarse debe mostrar su PID.
+• El cliente tomará como parámetros:
+◦ El PID del servidor.
+◦ La string que debería mandarse.
+• El cliente debe comunicar la string pasada como parámetro al servidor. Una vez la string se haya recibido, el servidor debe mostrarla.
+• El servidor debe ser capaz de mostrar la string suficientemente rápido. Por rápido queremos decir que si piensas que es está tardando mucho, probablemente es que está tardando demasiado.
+
+• 您必须创建一个包含客户端和服务器端的通信程序。
+• 必须先启动服务器端；启动后，服务器端必须显示其进程标识符 (PID)。
+• 客户端将接受以下参数：
+◦ 服务器端进程标识符 (PID)。
+◦ 需要发送的字符串。
+• 客户端必须将作为参数传递的字符串传递给服务器端。服务器端收到字符串后，必须将其显示出来。
+• 服务器端必须能够足够快地显示字符串。“快”的意思是，如果您认为它花费的时间太长，那么它很可能确实花费了太长的时间。
+
+1 segundo para mostrar 100 caracteres es ¡muchíiiiisimo!
+
+1 秒显示 100 个字符真是太长了！
+
+• Tu servidor debe poder recibir strings de distintos clientes consecutivamente, sin necesidad de reiniciar.
+• La comunicación entre tu cliente y tu servidor debe hacerse SOLO utilizando señales UNIX.
+• Solo puedes utilizar estas dos señales: SIGUSR1 y SIGUSR2.
+
+• 你的服务器必须能够连续接收来自不同客户端的字符串，并且无需重启。
+• 你的客户端和服务器之间的通信只能使用 UNIX 信号。
+• 你只能使用以下两个信号：SIGUSR1 和 SIGUSR2。
+
+Linux no pone en cola señales cuando ya tienes señales pendientes de este tipo. ¿Hora de hacer bonus?
+
+当你已经有此类待处理信号时，Linux 不会将信号排队。是时候来点奖励了吗？
+
+Extras
+
+附加功能
+
+Lista de bonus:
+• El servidor confirma cada señal recibida mandando una señal al cliente.
+• Soporta los caracteres Unicode.
+
+奖励列表：
+• 服务器会通过向客户端发送信号来确认每个接收到的信号。
+• 支持 Unicode 字符。
+
+La parte extra solo será evaluada si la parte obligatoria está PERFECTA. Perfecta significa que la parte ogligaria se ha completado entera y funciona sin ningún error. Si no has alcanzado todos los
+requisitos de la parte obligaroria, tu bonus no será evaluada de ninguna manera.
+
+只有当强制部分达到“完美”标准时，才会对附加部分进行评估。“完美”意味着强制部分已完全完成并且运行正常，没有任何错误。如果你没有满足强制部分的所有要求，你的奖励将不会被评估。
+
+Entrega y evaluación de pares
+
+提交和同行评审
+
+Como es habitual, entrega tu trabajo en el repositorio Git. Solo el trabajo en tu repositorio será evaluado. Comprueba dos veces que los nombres de tus archivos sean los correctos.
+
+像往常一样，将你的工作提交到 Git 仓库。只有你仓库中的工作才会被评审。仔细检查您的文件名是否正确。
+
+
+
+
+
