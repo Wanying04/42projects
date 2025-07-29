@@ -1,41 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   more_1.c                                           :+:      :+:    :+:   */
+/*   strategy.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:05:43 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/25 20:58:58 by wtang            ###   ########.fr       */
+/*   Updated: 2025/07/28 13:41:33 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	get_rotate_a_count(t_stack *a, int value)
+void	rotate_stack_a(t_stack **a, int *r_a)
 {
-	int	size_a;
-	int	target_pos;
-
-	size_a = stack_size(a);
-	target_pos = find_target_pos(a, value);
-	if (target_pos <= size_a / 2)
-		return (target_pos);
-	else
-		return (-(size_a - target_pos));
+	while (*r_a > 0)
+	{
+		ra(a);
+		(*r_a)--;
+	}
+	while (*r_a < 0)
+	{
+		rra(a);
+		(*r_a)++;
+	}
 }
 
-int	get_rotate_b_count(t_stack *b, int value)
+void	rotate_stack_b(t_stack **b, int *r_b)
 {
-	int	size_b;
-	int	pos_b;
+	while (*r_b > 0)
+	{
+		rb(b);
+		(*r_b)--;
+	}
+	while (*r_b < 0)
+	{
+		rrb(b);
+		(*r_b)++;
+	}
+}
 
-	size_b = stack_size(b);
-	pos_b = get_pos_by_value(b, value);
-	if (pos_b <= size_b / 2)
-		return (pos_b);
-	else
-		return (-(size_b - pos_b));
+void	execute_dual_rotation(t_stack **a, t_stack **b, int r_a, int r_b)
+{
+	while (r_a > 0 && r_b > 0)
+	{
+		rr(a, b);
+		r_a--;
+		r_b--;
+	}
+	while (r_a < 0 && r_b < 0)
+	{
+		rrr(a, b);
+		r_a++;
+		r_b++;
+	}
+	rotate_stack_a(a, &r_a);
+	rotate_stack_b(b, &r_b);
 }
 
 void	evaluate_best_push(t_stack **a, t_stack **b, int *best_a, int *best_b)

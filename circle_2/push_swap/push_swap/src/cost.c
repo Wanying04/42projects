@@ -1,46 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   more_3.c                                           :+:      :+:    :+:   */
+/*   cost.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 19:32:49 by wtang             #+#    #+#             */
-/*   Updated: 2025/07/25 20:09:32 by wtang            ###   ########.fr       */
+/*   Created: 2025/07/24 16:04:10 by wtang             #+#    #+#             */
+/*   Updated: 2025/07/28 13:43:08 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	get_pos_by_value(t_stack *stack, int value)
+int	get_rotate_a_count(t_stack *a, int value)
 {
-	int	pos;
+	int	size_a;
+	int	target_pos;
 
-	pos = 0;
-	while (stack)
-	{
-		if (stack->value == value)
-			return (pos);
-		pos++;
-		stack = stack->next;
-	}
-	return (-1);
+	size_a = stack_size(a);
+	target_pos = find_target_pos(a, value);
+	if (target_pos <= size_a / 2)
+		return (target_pos);
+	else
+		return (-(size_a - target_pos));
 }
 
-int	get_current_pos(t_stack *stack, t_stack *node)
+int	get_rotate_b_count(t_stack *b, int value)
 {
-	int	pos;
+	int	size_b;
+	int	pos_b;
 
-	pos = 0;
-	while (stack && stack != node)
-	{
-		pos++;
-		stack = stack->next;
-	}
-	if (stack)
-		return (pos);
+	size_b = stack_size(b);
+	pos_b = get_pos_by_value(b, value);
+	if (pos_b <= size_b / 2)
+		return (pos_b);
 	else
-		return (-1);
+		return (-(size_b - pos_b));
 }
 
 int	calculate_push_cost(int pos_a, int pos_b)
@@ -81,26 +76,10 @@ int	find_target_pos(t_stack *a, int value)
 	return (0);
 }
 
-void	find_min_max_pos(t_stack *a, int *min_v, int *max_v, int *min_pos)
+int	calculate_rotation_cost(int pos, int stack_size)
 {
-	t_stack	*tmp;
-	int		i;
-
-	tmp = a;
-	i = 0;
-	*min_v = INT_MAX;
-	*max_v = INT_MIN;
-	*min_pos = 0;
-	while (tmp)
-	{
-		if (tmp->value < *min_v)
-		{
-			*min_v = tmp->value;
-			*min_pos = i;
-		}
-		if (tmp->value > *max_v)
-			*max_v = tmp->value;
-		tmp = tmp->next;
-		i++;
-	}
+	if (pos <= stack_size / 2)
+		return (pos);
+	else
+		return (stack_size - pos);
 }
