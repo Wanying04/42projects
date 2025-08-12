@@ -1,0 +1,487 @@
+main.c
+
+int	main(int ac, char *av[])
+{
+    t_stack	*stack_a;  // 主栈，最终排序结果在这里
+    t_stack	*stack_b;  // 辅助栈，临时存放元素
+
+    stack_a = NULL;
+    stack_b = NULL;
+    
+    // 步骤1: 检查是否有参数
+    if (ac == 1)
+        return (0);  // 没有参数，直接退出
+    
+    // 步骤2: 解析和验证参数，创建栈a
+    if (ft_parse_arguments(ac, av, &stack_a) != 0)
+        return (1);  // 参数有误，错误退出
+    
+    // 步骤3: 为栈中每个元素分配索引（1到n）
+    ft_assign_index(&stack_a);
+    
+    // 步骤4: 检查是否已经排序，如果没有则进行排序
+    if (!ft_is_sorted(stack_a))
+    {
+        push_swap(&stack_a, &stack_b);
+    }
+    
+    // 步骤5: 清理内存
+    ft_free_stack(&stack_a);
+    ft_free_stack(&stack_b);
+    return (0);
+}
+
+
+
+
+
+parse_arguments
+
+int	ft_parse_arguments(int ac, char **av, t_stack **stack)
+{
+    int		*nums;    // 存储转换后的整数数组
+    char	**s;      // 字符串数组（参数列表）
+    int		slen;     // 数组长度
+
+    // 第1步：准备工作 - 处理输入格式，分配内存
+    nums = prepare_parsing(ac, av, &s, &slen);
+    if (!nums)
+        return (1);  // 内存分配失败
+
+    // 第2步：解析验证 - 将字符串转为整数并验证
+    if (parse_and_validate_args(s, nums, slen))
+    {
+        free(nums);
+        return (1);  // 解析失败，释放内存
+    }
+
+    // 第3步：创建栈 - 检查重复并构建栈结构
+    if (create_stack_and_check_duplicates(nums, slen, stack))
+    {
+        free(nums);
+        return (1);  // 创建失败，释放内存
+    }
+
+    // 第4步：清理临时内存
+    free(nums);
+    return (0);  // 成功
+}
+
+int	*prepare_parsing(int ac, char **av, char ***s, int *slen)
+{
+    int	*nums;
+
+    // 处理两种输入格式：
+    if (ac == 2)
+        *s = ft_split(av[1], ' ');    // "./push_swap '4 2 1 3'"
+    else
+        *s = av + 1;                  // "./push_swap 4 2 1 3"
+    
+    // 计算参数数量
+    *slen = 0;
+    while ((*s)[*slen])
+        (*slen)++;
+    
+    // 为整数数组分配内存
+    nums = malloc(sizeof(int) * (*slen));
+    return (nums);
+}
+
+int	parse_and_validate_args(char **s, int *nums, int slen)
+{
+    int	i = 0;
+    
+    while (i < slen)
+    {
+        // 验证每个字符串是否为有效整数
+        if (!ft_is_valid_int(s[i]))
+        {
+            write(2, "Error\n", 6);
+            return (1);
+        }
+        
+        // 转换为整数并存储
+        nums[i] = ft_atoi(s[i]);
+        i++;
+    }
+    return (0);
+}
+
+int	ft_is_valid_int(char *s)
+{
+    int	sign = 1;
+    
+    // 第1步：处理符号和初始检查
+    if (!handle_sign_and_initial_check(&s, &sign))
+        return (0);
+    
+    // 第2步：检查数值范围
+    return (check_number_within_range(s, sign));
+}
+
+int	handle_sign_and_initial_check(char **s, int *sign)
+{
+    if (!*s || !**s)          // 空字符串检查
+        return (0);
+    
+    if (**s == '+' || **s == '-')
+    {
+        if (**s == '-')
+            *sign = -1;       // 记录负号
+        (*s)++;               // 跳过符号
+        if (!**s)             // 只有符号，无数字
+            return (0);
+    }
+    return (1);
+}
+
+int	check_number_within_range(char *s, int sign)
+{
+    long long	num = 0;
+    long long	limit;
+    
+    while (*s)
+    {
+        if (!ft_isdigit(*s))  // 非数字字符
+            return (0);
+        
+        // 设置限制值
+        if (sign == 1)
+            limit = INT_MAX;           // 2147483647
+        else
+            limit = (long long)INT_MAX + 1;  // 2147483648 (INT_MIN的绝对值)
+        
+        // 预测性溢出检查
+        if (num > limit / 10)
+            return (0);
+        if (num == limit / 10 && (*s - '0') > limit % 10)
+            return (0);
+        
+        // 安全地进行计算
+        num = num * 10 + (*s - '0');
+        s++;
+    }
+    return (1);
+}
+
+int	create_stack_and_check_duplicates(int *nums, int slen, t_stack **stack)
+{
+    // 检查重复数字
+    if (ft_has_duplicates(nums, slen))
+    {
+        write(2, "Error\n", 6);
+        return (1);
+    }
+    
+    // 创建栈结构
+    *stack = ft_create_stack(nums, slen);
+    if (!*stack)
+    {
+        write(2, "Error\n", 6);
+        return (1);
+    }
+    return (0);
+}
+
+int	ft_has_duplicates(int *nums, int size)
+{
+    int	i, j;
+
+    i = 0;
+    while (i < size)
+    {
+        j = i + 1;
+        while (j < size)
+        {
+            if (nums[i] == nums[j])  // 发现重复
+                return (1);
+            j++;
+        }
+        i++;
+    }
+    return (0);  // 无重复
+}
+
+t_stack	*ft_create_stack(int *nums, int size)
+{
+    t_stack	*stack;
+    int		i;
+
+    stack = NULL;                        // 初始化空栈
+    i = size - 1;                        // 从数组末尾开始
+    while (i >= 0)
+    {
+        if (ft_stack_push(&stack, nums[i]) == -1)
+        {
+            ft_free_stack(&stack);       // 失败时清理已分配的内存
+            return (NULL);
+        }
+        i--;
+    }
+    return (stack);
+}
+
+int	ft_stack_push(t_stack **stack, int value)
+{
+    t_stack	*new_node;
+
+    new_node = malloc(sizeof(t_stack));  // 分配新节点内存
+    if (!new_node)
+        return (-1);                     // 内存分配失败
+    
+    new_node->value = value;             // 设置节点值
+    new_node->next = *stack;             // 新节点指向原栈顶
+    *stack = new_node;                   // 更新栈顶指针
+    return (0);                          // 成功
+}
+
+void	ft_free_stack(t_stack **stack)
+{
+    t_stack	*tmp;
+
+    while (*stack != NULL)
+    {
+        tmp = (*stack)->next;    // 保存下一个节点的地址
+        free(*stack);            // 释放当前节点
+        *stack = tmp;            // 移动到下一个节点
+    }
+}
+
+
+
+
+
+index
+
+int	*ft_get_sorted_array(t_stack *stack, int size)
+{
+	int		*arr;
+	int		i;
+	t_stack	*tmp;
+
+	arr = malloc(size * sizeof(int));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	tmp = stack;
+	while (i < size)
+	{
+		arr[i] = tmp->value;
+		tmp = tmp->next;
+		i++;
+	}
+	ft_sort_array(arr, size);
+	return (arr);
+}
+
+int	stack_size(t_stack *stack)
+{
+    int	count;
+
+    count = 0;
+    while (stack != NULL)
+    {
+        count++;
+        stack = stack->next;  // 移动到下一个节点
+    }
+    return (count);
+}
+
+int	*ft_get_sorted_array(t_stack *stack, int size)
+{
+    int		*arr;
+    int		i;
+    t_stack	*tmp;
+
+    arr = malloc(size * sizeof(int));               // 分配数组内存
+    if (!arr)
+        return (NULL);                              // 内存分配失败
+    
+    i = 0;
+    tmp = stack;
+    while (i < size)                                // 遍历栈，复制值到数组
+    {
+        arr[i] = tmp->value;
+        tmp = tmp->next;
+        i++;
+    }
+    
+    ft_sort_array(arr, size);                       // 对数组进行排序
+    return (arr);                                   // 返回排序后的数组
+}
+
+void	ft_sort_array(int *arr, int size)
+{
+    int	i;
+    int	j;
+    int	min_idx;
+    int	temp;
+
+    i = 0;
+    while (i < size - 1)                            // 外层循环：未排序区起始位置
+    {
+        min_idx = i;                                // 假设当前位置是最小值
+        j = i + 1;
+        while (j < size)                            // 内层循环：寻找真正的最小值
+        {
+            if (arr[j] < arr[min_idx])
+                min_idx = j;                        // 更新最小值索引
+            j++;
+        }
+        if (min_idx != i)                           // 如果找到更小的值，进行交换
+        {
+            temp = arr[i];
+            arr[i] = arr[min_idx];
+            arr[min_idx] = temp;
+        }
+        i++;
+    }
+}
+
+void	ft_set_indexes(t_stack **stack, int *sorted_array, int size)
+{
+    t_stack	*tmp;
+    int		j;
+
+    tmp = *stack;
+    while (tmp)                                     // 遍历栈中每个节点
+    {
+        j = 0;
+        while (j < size)                            // 在排序数组中查找对应值
+        {
+            if (sorted_array[j] == tmp->value)
+            {
+                tmp->index = j + 1;                 // 分配索引（从1开始）
+                break ;                             // 找到后立即退出内层循环
+            }
+            j++;
+        }
+        tmp = tmp->next;                            // 移动到下一个节点
+    }
+}
+
+
+
+
+
+push_swap
+
+int	ft_is_sorted(t_stack *stack)
+{
+    if (!stack)
+        return (1);                              // 空栈认为已排序
+    
+    while (stack->next)                          // 遍历到倒数第二个节点
+    {
+        if (stack->value > stack->next->value)   // 发现逆序
+            return (0);                          // 未排序
+        stack = stack->next;
+    }
+    return (1);                                  // 完全有序
+}
+
+void	push_swap(t_stack **stack_a, t_stack **stack_b)
+{
+    int	size;
+
+    if (!stack_a || !*stack_a)
+        return ;                                 // 空栈检查
+    
+    size = stack_size(*stack_a);
+    if (size <= 1 || ft_is_sorted(*stack_a))
+        return ;                                 // 已排序或单元素，无需操作
+    
+    // 根据元素数量选择排序策略
+    if (size == 2)
+        ft_sort_2(stack_a);                      // 2元素：简单交换
+    else if (size == 3)
+        ft_sort_3(stack_a);                      // 3元素：专用算法
+    else
+        ft_sort_more(stack_a, stack_b);          // 4+元素：复杂算法
+}
+
+void	ft_sort_2(t_stack **stack)
+{
+    if (!stack || !*stack || !(*stack)->next)
+        return ;                                 // 安全检查
+    
+    if ((*stack)->value > (*stack)->next->value)
+        sa(stack);                               // 交换栈顶两元素
+}
+
+void	ft_sort_3(t_stack **stack_a)
+{
+    if (!stack_a || !*stack_a || !(*stack_a)->next || !(*stack_a)->next->next)
+        return ;                                 // 确保有3个元素
+    
+    // 找到最大值并移到栈底
+    if ((*stack_a)->value > (*stack_a)->next->value
+        && (*stack_a)->value > (*stack_a)->next->next->value)
+        ra(stack_a);                             // 最大值在顶部，向上旋转
+    else if ((*stack_a)->next->value > (*stack_a)->value
+        && (*stack_a)->next->value > (*stack_a)->next->next->value)
+        rra(stack_a);                            // 最大值在中间，向下旋转
+    
+    // 处理剩余的栈顶两个元素
+    if ((*stack_a)->value > (*stack_a)->next->value)
+        sa(stack_a);                             // 交换使其有序
+}
+
+void	ft_sort_more(t_stack **a, t_stack **b)
+{
+    int	size;
+    int	managed;
+
+    size = stack_size(*a);
+    managed = 0;
+    if (!a || !*a)
+        return ;
+    // 阶段一：智能分割
+    // 这个循环的目标是初步分割栈a。
+    // 它遍历一次栈a中的所有元素（通过managed计数器）。
+    // 策略是：如果一个元素的'index'（它在最终排好序的序列中的位置）小于或等于总大小的一半，
+    // 那么它被认为是“较小”的元素，就被推到栈b中。
+    // 否则，它被认为是“较大”的元素，就通过ra操作把它旋转到栈a的底部。
+    // 这样操作后，较小的元素都进入了栈b，较大的元素留在了栈a。
+    while (managed < size && *a)
+    {
+        if ((*a)->index <= size / 2)
+            pb(a, b);
+        else
+            ra(a);
+        managed++;
+    }
+    // 阶段二：精简栈a
+    // 经过第一轮分割，栈a中可能还剩下多于3个元素。
+    // 这个循环将栈a中多余的元素（除了最后3个）也推到栈b中。
+    // 这样做的目的是让栈a中只留下3个元素，方便进行专门的3元素排序。
+    while (stack_size(*a) > 3 && *a)
+        pb(a, b);
+    // 阶段三：排序栈a
+    // 此刻，栈a中只剩下3个元素，调用ft_sort_3函数对这3个元素进行快速排序。
+    ft_sort_3(a);
+    // 阶段四：最优回推
+    // 现在栈a已经有序（虽然只有3个元素），而所有其他元素都在栈b中。
+    // 这个循环的目标是将栈b中的所有元素以最高效的方式推回栈a。
+    // 每次循环：
+    // 1. find_optimal_push(a, b): 这个函数会计算将栈b中哪个元素推回栈a所需的总操作数最少。
+    //    它会分析b中每个元素，计算把它放到a中正确位置需要多少次ra/rra和rb/rrb操作，并找到成本最低的那个。
+    // 2. pa(a, b): 找到最优目标后，执行相应的旋转操作（在find_optimal_push内部完成），然后用pa把选定的元素从b推回a。
+    while (*b)
+    {
+        find_optimal_push(a, b);
+        pa(a, b);
+    }
+    // 阶段五：最终对齐
+    // 当所有元素都回到栈a后，栈a中的数字已经是整体有序的了，但可能没有对齐。
+    // 例如，最小的元素可能不在栈顶。
+    // final_rotate函数会找到最小元素的当前位置，然后通过ra或rra操作，
+    // 用最少的步数将最小元素旋转到栈顶，完成整个排序。
+    final_rotate(a);
+}
+
+
+
+
+
+

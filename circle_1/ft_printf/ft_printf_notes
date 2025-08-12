@@ -1,0 +1,149 @@
+ft_printf
+
+Instrucciones generales
+
+• Tu proyecto deberá estar escrito en C.
+• Tu proyecto debe estar escrito siguiendo la Norma. Si tienes archivos o funciones adicionales, estas están incluidas en la verificación de la Norma y tendrás un 0 si hay algún error de norma en cualquiera de ellos.
+• Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+• Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+• Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y por supuesto tu Makefile no debe hacer relink.
+• Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+• Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+• Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+• Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu programa funciona correctamente durante tu evaluación y la de otros compañeros.
+Y sí, tienes permitido utilizar estas pruebas durante tu evaluación o la de otros compañeros.
+• Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+
+一般说明
+
+• 您的项目必须用 C 语言编写。
+• 您的项目必须按照标准编写。如果您有附加文件或功能，这些将包含在标准检查中，如果其中任何一个存在任何标准错误，您将得到 0。
+• 除未定义行为的情况外，您的函数不得意外终止（段错误、总线错误、双重释放等）。如果发生这种情况，您的项目将被视为不起作用，并且您将在评估期间得到 0 分。
+• 在需要时必须正确释放堆中分配的所有内存。不允许出现内存泄漏。
+• 如果语句需要，您必须提供一个 Makefile，它将使用 -Wall、-Werror 和 -Wextra 标志将您的源文件编译为所需的输出，使用 cc，当然您的 Makefile 不能重新链接。
+• 您的 Makefile 必须至少包含 $(NAME)、all、clean、fclean 和 re 规则。
+• 为了提供项目的奖励，您必须在 Makefile 中包含一个奖励规则，在该规则中添加项目主要部分中禁止的所有标题、库或函数。奖金必须放在单独的 _bonus.{c/h} 文件中。强制性部分和奖金部分分别评估。
+• 如果您的项目允许使用 libft，则必须将其源代码和相关的 Makefile 复制到包含其对应 Makefile 的 libft 目录中。您的项目的 Makefile 必须首先使用其 Makefile 编译库，然后再编译项目。
+• 我们鼓励您为您的项目创建测试程序，尽管这项工作不会被交付或评估。它将使您有机会在您和其他同事的评估过程中验证您的程序是否正常运行。
+是的，您可以在评估自己或其他同学时使用这些测试。
+• 将您的工作交付至指定的 Git 存储库。仅评估您 Git 存储库中的工作。如果 Deepthought 评估你的工作，它会在你的同行之后进行评估。如果在 Deepthought 评估期间发现错误，则评估完成。
+
+Parte obligatoria
+
+Debes reprogramar la función printf() de la libc.
+El prototipo de ft_printf() es:
+int ft_printf(char const *, ...);
+Aquí tienes los requisitos:
+• No implementes la gestión del buffer del printf() original.
+• Deberás implementar las siguientes conversiones: cspdiuxX %
+• Tu función se comparará con el printf() original.
+• Tienes que usar el comando ar para crear tu librería. El uso de libtool está prohibido.
+• Tu archivo libftprintf.a deberá ser creado en la raiz de tu repositorio.
+Tienes que implementar las siguientes conversiones:
+• %c Imprime un solo carácter.
+• %s Imprime una string (como se define por defecto en C).
+• %p El puntero void * dado como argumento se imprime en formato hexadecimal.
+• %d Imprime un número decimal (base 10).
+• %i Imprime un entero en base 10.
+• %u Imprime un número decimal (base 10) sin signo.
+• %x Imprime un número hexadecimal (base 16) en minúsculas.
+• %X Imprime un número hexadecimal (base 16) en mayúsculas.
+• % % para imprimir el símbolo del porcentaje.
+
+必填部分
+
+您需要重写 libc 的 printf() 函数。
+
+ft_printf()的原型是：
+int ft_printf（char const *，...）；
+
+以下是要求：
+• 不要实现原始printf()的缓冲区管理。
+• 您需要实现以下转换：cspdiuxX %
+• 您的函数将与原始的 printf() 进行比较。
+• 您必须使用 ar 命令来创建您的库。禁止使用 libtool。
+• 您的 libftprintf.a 文件应在您的存储库的根目录下创建。
+
+您需要实现以下转换：
+• %c 打印单个字符。
+• %s 打印一个字符串（如 C 中的默认定义）。
+
+• %p 作为参数给出的空指针*以十六进制格式打印。
+
+• %d 打印十进制数（基数为 10）。>> 0/positive/negative
+• %i 打印以 10 为基数的整数。>> 0/positive/negative
+• %u 打印无符号十进制（基数为 10）数。>> 0/positive
+
+• %x 打印小写的十六进制（基数为 16）数字。
+• %X 以大写形式打印十六进制（基数为 16）数字。
+
+• % % 打印百分比符号。
+
+Parte bonus
+
+No es necesario hacer todos los bonus.
+Lista de bonus:
+• Gestiona cualquier combinación de los siguientes flags: ’-0.’ y el ancho mínimo (field minimum width) bajo todas las conversiones posibles.
+• Gestiona todos los siguientes flags: ’# +’ (sí, uno de ellos es un espacio).
+
+奖金部分
+
+没有必要把所有的奖金都做完。
+奖金清单：
+• 处理以下标志的任意组合：’-0.’ 以及所有可能转换下的最小宽度（字段最小宽度）。
+• 管理以下所有标志：“# +”（是的，其中一个是空格）。
+
+Si quieres completar la parte bonus, piensa en la implementación de las características extras desde el primcipio. De esta forma,
+evitarás los peligros de un enfoque ingenuo.
+
+如果您想完成奖励部分，请从一开始就考虑实现额外的功能。这样，
+你将避免幼稚方法带来的危险。
+
+La parte bonus solo podrá evaluarse si la parte obligatoria está PERFECTA. Perfecta significa que la parte obligatoria funciona al completo, sin ningún error ni comportamiento inesperado. Si no has superado todos los requisitos de la parte obligatoria, no se evaluará nada de la parte bonus.
+
+只有当必答部分达到完美时，才能评估奖励部分。完美意味着所需部分完全正常工作，没有任何错误或意外行为。如果你没有通过必修部分的所有要求，则奖励部分将不进行任何评估。
+
+Entrega y evaluacion
+
+Entrega tu proyecto en tu repositorio Git como de costumbre. Sólo será evaluado el contenido de dentro de tu repositorio Git. Asegúrate de comprobar dos veces los nombres de tus archivos para que sean correctos.
+Una vez que superes este ejercicio, podrás incluir ft_printf() en tu libft, por lo que podrás utilizarla en futuros proyectos en C.
+
+交付与评估
+
+像往常一样将您的项目交付到您的 Git 存储库。仅评估您的 Git 存储库中的内容。请务必仔细检查您的文件名以确保它们正确无误。
+一旦通过这项练习，您将能够在 libft 中包含 ft_printf()，以便可以在未来的 C 项目中使用它。
+
+?????
+
+++++++++++[>+>+++>+++++++>++++++++++««-]»>.>---.++++++++++++.++.+++
++++.--.«++.»------.------------.+++++++++++++.«.»++++++.------------
+.-------. +++++++++++++++++++.«.»----------------.+++++.+++++++++.---
+----------.--.+ ++++++++++++++++.--------.+++++++++++++.«.»----------
+-------------.+++.+++ ++++.---.----.+++++++++++++++++.---------------
+--.-.«.»+++++.+++++.«.>-------...
+
+
+
+
+
+Función	Descripción
+malloc	Solicitar un bloque de memoria del tamaño suministrado como parámetro.
+free	Desasigna un bloque de memoria que se había asignado previamente mediante una llamada.
+write	Hace que los bytes que indiques del buffer sean escritos en el file descriptor seleccionado.
+va_start Permite el acceso a los argumentos de la función variada.
+va_arg	Accede al siguiente argumento de la función variada.
+va_copy	Hace una copia de los argumentos de la función variádica.
+va_end	Finaliza el recorrido de los argumentos de la función variada.
+
+功能描述
+malloc 请求一个大小与参数相同的内存块。
+free 释放先前通过调用分配的内存块。
+write 将缓冲区中的指定字节写入选定的文件描述符。
+va_start 允许访问可变函数参数。
+va_arg 访问可变函数的下一个参数。
+va_copy 对可变函数参数进行复制。
+va_end 结束可变函数参数的遍历。
+
+
+
+
