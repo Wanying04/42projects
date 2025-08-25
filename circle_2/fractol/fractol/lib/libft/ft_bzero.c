@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/17 12:52:08 by wtang            ###   ########.fr       */
+/*   Created: 2024/12/03 16:24:24 by wtang             #+#    #+#             */
+/*   Updated: 2024/12/19 15:20:20 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	show_help(void)
+#include "libft.h"
+
+void	ft_bzero(void *s, size_t n)
 {
-	
+	unsigned char	*ptr;
+
+	ptr = (unsigned char *)s;
+	while (n--)
+	{
+		*ptr = 0;
+		ptr++;
+	}
 }

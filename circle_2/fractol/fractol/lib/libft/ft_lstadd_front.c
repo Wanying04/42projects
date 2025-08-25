@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/17 12:52:08 by wtang            ###   ########.fr       */
+/*   Created: 2024/12/19 17:15:49 by wtang             #+#    #+#             */
+/*   Updated: 2024/12/19 18:00:50 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	show_help(void)
+#include "libft.h"
+
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	
+	if (new)
+	{
+		new->next = *lst;
+		*lst = new;
+	}
 }

@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/17 12:52:08 by wtang            ###   ########.fr       */
+/*   Created: 2024/12/19 17:16:08 by wtang             #+#    #+#             */
+/*   Updated: 2024/12/19 18:05:01 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	show_help(void)
+#include "libft.h"
+
+int	ft_lstsize(t_list *lst)
 {
-	
+	int	count;
+
+	count = 0;
+	while (lst != NULL)
+	{
+		count++;
+		lst = lst->next;
+	}
+	return (count);
 }

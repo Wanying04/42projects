@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/17 12:52:08 by wtang            ###   ########.fr       */
+/*   Created: 2024/12/19 17:18:45 by wtang             #+#    #+#             */
+/*   Updated: 2024/12/19 18:45:17 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	show_help(void)
+#include "libft.h"
+
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	
+	t_list	*temp;
+
+	if (lst == NULL || del == NULL)
+		return ;
+	while (*lst)
+	{
+		temp = (*lst)->next;
+		del((*lst)->content);
+		free(*lst);
+		*lst = temp;
+	}
+	*lst = NULL;
 }
