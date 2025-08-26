@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 18:55:32 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/27 00:34:10 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/27 00:54:14 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	draw_fractal(t_fractol *fractol)
 		x = -1;
 		while (++x < WIN_SIZE)
 		{
-			cr = fractol->min_re + (double)x * (fractol->max_re - fractol->min_r) / WIN_SIZE;
-			ci = fractol->max_im - (double)y * (fractol->max_im - fractol->min_i) / WIN_SIZE;
+			cr = fractol->min_re + (double)x * (fractol->max_re - fractol->min_re) / WIN_SIZE;
+			ci = fractol->max_im - (double)y * (fractol->max_im - fractol->min_im) / WIN_SIZE;
 			iter = cal_fractal(fractol, cr, ci, x, y);
 			set_pixel_color(fractol, x, y, iter);
 		}
