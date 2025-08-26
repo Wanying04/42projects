@@ -1,46 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/23 11:22:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/26 22:49:23 by wtang            ###   ########.fr       */
+/*   Created: 2025/08/26 22:50:26 by wtang             #+#    #+#             */
+/*   Updated: 2025/08/26 22:53:33 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FRACTOL_H
-# define FRACTOL_H
-
-#include "libft.h"
+#include "fractol.h"
 
 
-typedef struct	s_fractol
+int	key_hook(int keycode, void *param)
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*img_addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
 	
-	double	min_re;
-	double	max_re;
-	double	min_im;
-	double	max_im;
-	int		max_iterations;
-	
-	int		color_scheme;
-	
-	double	julia_c_re;
-	double	julia_c_im;
-	
-	int		type;
-	int		is_julia_locked;
-}	t_fractol
+}
 
-//
+int mouse_hook(int button, int x, int y, void *param)
+{
+	
+}
 
-#endif
+
+int	end_fractol(t_fractol *fractol)
+{
+	
+}

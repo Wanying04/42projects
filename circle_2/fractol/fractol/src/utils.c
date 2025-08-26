@@ -6,11 +6,14 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/17 12:52:08 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/26 22:53:28 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	show_help(void)
+#include "fractol.h"
+
+void	display_help()
 {
-	
+	write(1, "Try mandlebrot or julia", 23);
 }
+
