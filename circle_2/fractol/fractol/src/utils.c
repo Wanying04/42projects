@@ -6,14 +6,14 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 12:51:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/26 22:53:28 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/26 23:41:58 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	display_help()
+void	display_help(void)
 {
-	write(1, "Try mandlebrot or julia", 23);
+	write(1, "Try 'mandelbrot' or 'julia'\n", 28);
+	exit(0);
 }
-
