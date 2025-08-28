@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:50:26 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/27 00:51:57 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/28 17:56:22 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,15 @@ void	move_view(t_fractol *fractol, int keycode)
 		fractol->min_re += move_amount;
 		fractol->max_re += move_amount;
 	}
+}
+
+void	change_fractal_type(t_fractol *fractol, int type)
+{
+	if (type == 1)
+		fractol->type = MANDELBROT;
+	else if (type == 2)
+		fractol->type = JULIA;
+	// 可以根据需要添加更多分形类型
+	reset_fractol(fractol, fractol->type);
+	draw_fractal(fractol);
 }

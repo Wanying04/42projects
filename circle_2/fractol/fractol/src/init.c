@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:51:24 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/27 00:20:30 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/28 17:57:40 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	init_fractol(t_fractol *fractol, char *av)
 	if (!fractol || !av)
 		return ;
 	reset_fractol(fractol, MANDELBROT);
-	if (strncmp(av, "mandelbrot", 10) == 0)
+	if (ft_strncmp(av, "mandelbrot", 10) == 0)
 		fractol->type = MANDELBROT;
-	else if (strncmp(av, "julia", 5) == 0)
+	else if (ft_strncmp(av, "julia", 5) == 0)
 		fractol->type = JULIA;
 	else
 	{
@@ -71,7 +71,7 @@ void	init_environment(t_fractol *fractol)
 
 void	error_exit(char *message)
 {
-	write(2, message, strlen(message));
+	write(2, message, ft_strlen(message));
 	write(2, "\n", 1);
 	exit(1);
 }

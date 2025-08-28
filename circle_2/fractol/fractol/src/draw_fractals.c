@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 18:55:32 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/27 00:54:14 by wtang            ###   ########.fr       */
+/*   Updated: 2025/08/28 17:52:35 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ void	draw_fractal(t_fractol *fractol)
 		{
 			cr = fractol->min_re + (double)x * (fractol->max_re - fractol->min_re) / WIN_SIZE;
 			ci = fractol->max_im - (double)y * (fractol->max_im - fractol->min_im) / WIN_SIZE;
-			iter = cal_fractal(fractol, cr, ci, x, y);
+			iter = cal_fractal(fractol, cr, ci);
 			set_pixel_color(fractol, x, y, iter);
 		}
 	}
 	mlx_put_image_to_window(fractol->mlx, fractol->win, fractol->img, 0, 0);
 }
 
-int	cal_fractal(t_fractol *fractol, double cr, double ci, int x, int y)
+int	cal_fractal(t_fractol *fractol, double cr, double ci)
 {
 	int	iter;
 	
@@ -47,7 +47,7 @@ int	cal_fractal(t_fractol *fractol, double cr, double ci, int x, int y)
 	return (iter);
 }
 
-int	cal_maldelbrot(t_fractol *fractol, double cr, double ci)
+int	cal_mandelbrot(t_fractol *fractol, double cr, double ci)
 {
 	double	zr;
 	double	zi;
