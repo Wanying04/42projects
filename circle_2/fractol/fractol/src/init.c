@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:51:24 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/28 17:57:40 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/13 21:37:48 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@ void	reset_fractol(t_fractol *fractol, int fractal_type)
 	fractol->type = fractal_type;
 	fractol->zoom = 1.0;
 	fractol->offset_x = 0.0;
-	fractol->offset_x = 0.0;
+	fractol->offset_y = 0.0;
 	fractol->max_iterations = 100;
 	fractol->color_scheme = 0;
 	fractol->julia_c_re = -0.7;
 	fractol->julia_c_im = 0.27;
+	fractol->min_re = -2.0;
+	fractol->max_re = 1.0;
+	fractol->min_im = -1.5;
+	fractol->max_im = 1.5;
 }
 
 void	init_fractol(t_fractol *fractol, char *av)
