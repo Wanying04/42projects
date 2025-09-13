@@ -6,11 +6,39 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:48:03 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/12 23:20:45 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/13 10:39:19 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int	ft_atoi(const char *nptr)
+{
+	int	i;
+	int	sign;
+
+	i = 0;
+	sign = 1;
+	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\r'
+		|| *nptr == '\v' || *nptr == '\f')
+		nptr++;
+	if (*nptr == '-')
+	{
+		sign = -1;
+		nptr++;
+	}
+	else if (*nptr == '+')
+		nptr++;
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		i = i * 10 + (*nptr - '0');
+		nptr++;
+	}
+	return (sign * i);
+}
 
 void	send_char(int pid, char c)
 {

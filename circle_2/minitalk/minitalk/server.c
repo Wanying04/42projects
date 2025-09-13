@@ -6,11 +6,13 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:48:18 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/12 23:18:24 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/13 10:39:31 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
 
 static int	bit = 0;
 static char	c = 0;
