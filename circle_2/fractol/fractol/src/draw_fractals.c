@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 18:55:32 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/28 17:52:35 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/15 12:07:40 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,51 +47,11 @@ int	cal_fractal(t_fractol *fractol, double cr, double ci)
 	return (iter);
 }
 
-int	cal_mandelbrot(t_fractol *fractol, double cr, double ci)
-{
-	double	zr;
-	double	zi;
-	int		iter;
-	double	re_tmp;
-
-	zr = 0.0;
-	zi = 0.0;
-	iter = 0;
-	while (iter < fractol->max_iterations)
-	{
-		if ((zr * zr + zi * zi) > 4.0)
-			break;
-		re_tmp = zr * zr - zi * zi + cr;
-		zi = 2 * zr * zi + ci;
-		zr = re_tmp;
-		iter++;
-	}
-	return (iter);
-}
-
-int	cal_julia(t_fractol *fractol, double zr, double zi)
-{
-	int	iter;
-	double	re_tmp;
-
-	iter = 0;
-	while (iter < fractol->max_iterations)
-	{
-		if ((zr * zr + zi * zi) > 4.0)
-			break;
-		re_tmp = zr * zr - zi * zi + fractol->julia_c_re;
-		zi = 2 * zr * zi + fractol->julia_c_im;
-		zr = re_tmp;
-		iter++;
-	}
-	return (iter);
-}
-
 void	set_pixel_color(t_fractol *fractol, int x, int y, int iter)
 {
 	int	color;
 	int	offset;
-	
+
 	if (iter == fractol->max_iterations)
 		color = 0x000000;
 	else
@@ -104,8 +64,7 @@ int	create_pink_purple_color(int iter, int max_iter)
 {
 	double	ratio = (double)iter / max_iter;
 	int		r, g, b;
-	
-	// 粉紫色渐变：粉色(0xFFC0CB) → 紫色(0x800080)
+
 	r = 255 - (int)(75 * ratio);
     g = 192 - (int)(112 * ratio);
     b = 203 - (int)(123 * ratio);

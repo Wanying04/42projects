@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 11:22:54 by wtang             #+#    #+#             */
-/*   Updated: 2025/08/28 17:56:05 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/15 12:24:56 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,32 @@ typedef struct	s_fractol
 	int		is_julia_locked;
 }	t_fractol;
 
-//utils.c
+//utils
 void	display_help(void);
-//init.c
+//init
 void	init_fractol(t_fractol *fractol, char *av);
 void	reset_fractol(t_fractol *fractol, int fractal_type);
 void	init_environment(t_fractol *fractol);
+void	init_mlx_image(t_fractol *f);
 void	error_exit(char *message);
 //draw
 void	draw_fractal(t_fractol *fractol);
-int	cal_fractal(t_fractol *fractol, double cr, double ci);
-int	cal_mandelbrot(t_fractol *fractol, double cr, double ci);
-int	cal_julia(t_fractol *fractol, double zr, double zi);
+int		cal_fractal(t_fractol *fractol, double cr, double ci);
+int		cal_mandelbrot(t_fractol *fractol, double cr, double ci);
+int		cal_julia(t_fractol *fractol, double zr, double zi);
 void	set_pixel_color(t_fractol *fractol, int x, int y, int iter);
-int	create_pink_purple_color(int iter, int max_iter);
-//hooks.c
-int	key_hook(int keycode, t_fractol *fractol);
-int mouse_hook(int button, int x, int y, t_fractol *fractol);
-int	end_fractol(t_fractol *fractol);
-void	move_view(t_fractol *fractol, int keycode);
-void	change_fractal_type(t_fractol *fractol, int type);
+int		create_pink_purple_color(int iter, int max_iter);
+//fractals
+int		cal_mandelbrot(t_fractol *fractol, double cr, double ci);
+int		cal_julia(t_fractol *fractol, double zr, double zi);
+//mouse_hook
+int 	mouse_hook(int button, int x, int y, t_fractol *fractol);
 void	zoom_in(t_fractol *fractol, int x, int y);
 void	zoom_out(t_fractol *fractol, int x, int y);
+//hooks
+int		key_hook(int keycode, t_fractol *fractol);
+int		end_fractol(t_fractol *fractol);
+void	move_view(t_fractol *fractol, int keycode);
+void	change_fractal_type(t_fractol *fractol, int type);
 
 #endif

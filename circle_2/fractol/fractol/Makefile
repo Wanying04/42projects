@@ -6,7 +6,7 @@
 #    By: wtang <wtang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/12 23:24:22 by wtang             #+#    #+#              #
-#    Updated: 2025/08/28 17:51:06 by wtang            ###   ########.fr        #
+#    Updated: 2025/09/15 11:25:25 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ LIBFT = lib/libft/libft.a
 MLX_LINUX = lib/mlx_linux/libmlx_Linux.a
 
 INCLUDES = -Ilib/libft -Ilib/mlx_linux -Isrc
-
 LDFLAGS = -Llib/libft -Llib/mlx_linux
 LDLIBS = -lft -lmlx_Linux -lm -lX11 -lXext
 
@@ -27,8 +26,6 @@ SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:.c=.o)
 
 RM = rm -f
-
-MLX_FLAGS = -O3
 
 all: $(LIBFT) $(MLX_LINUX) $(NAME)
 
