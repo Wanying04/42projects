@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fractals.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtang <wtang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 12:07:22 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/15 12:07:45 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/15 16:33:14 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	cal_mandelbrot(t_fractol *fractol, double cr, double ci)
 	while (iter < fractol->max_iterations)
 	{
 		if ((zr * zr + zi * zi) > 4.0)
-			break;
+			break ;
 		re_tmp = zr * zr - zi * zi + cr;
 		zi = 2 * zr * zi + ci;
 		zr = re_tmp;
@@ -36,14 +36,14 @@ int	cal_mandelbrot(t_fractol *fractol, double cr, double ci)
 
 int	cal_julia(t_fractol *fractol, double zr, double zi)
 {
-	int	iter;
+	int		iter;
 	double	re_tmp;
 
 	iter = 0;
 	while (iter < fractol->max_iterations)
 	{
 		if ((zr * zr + zi * zi) > 4.0)
-			break;
+			break ;
 		re_tmp = zr * zr - zi * zi + fractol->julia_c_re;
 		zi = 2 * zr * zi + fractol->julia_c_im;
 		zr = re_tmp;

@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wtang <wtang@student.42.fr>                +#+  +:+       +#+         #
+#    By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/12 23:24:22 by wtang             #+#    #+#              #
-#    Updated: 2025/09/15 11:25:25 by wtang            ###   ########.fr        #
+#    Updated: 2025/09/15 16:47:48 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 LIBFT = lib/libft/libft.a

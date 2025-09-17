@@ -145,3 +145,136 @@ Como es habitual, entrega tu trabajo en el repositorio Git. Solo el trabajo en t
 
 
 
+
+// 信号处理函数 - 处理服务器发回来的信号
+static void	action(int sig)
+{
+	static int	received = 0;  // 静态变量，用来计数收到多少个确认信号
+
+	if (sig == SIGUSR1)        // 如果收到SIGUSR1信号
+		++received;           // 说明服务器成功收到了一个字符，计数+1
+	else                      // 如果收到SIGUSR2信号
+	{
+		ft_putnbr_fd(received, 1);  // 打印总共收到了多少个确认
+		ft_putchar_fd('\n', 1);     // 换行
+		exit(0);              // 程序正常退出
+	}
+}
+
+
+// 发送信号的函数 - 把字符串转换成信号发给服务器
+static void	mt_kill(int pid, char *str)
+{
+	int		i;
+	char	c;
+
+	while (*str)  // 循环处理字符串中的每一个字符
+	{
+		i = 8;    // 每个字符有8个bit
+		c = *str++;  // 取出当前字符，指针移到下一个
+		while (i--)  // 循环处理字符的8个bit
+		{
+			if (c >> i & 1)    // 检查第i位是不是1
+				kill(pid, SIGUSR2);  // 如果是1，发送SIGUSR2
+			else
+				kill(pid, SIGUSR1);  // 如果是0，发送SIGUSR1
+			usleep(100);       // 等待100微秒，让服务器有时间处理
+		}
+	}
+	// 发送结束标志：8个0（空字符）
+	i = 8;
+	while (i--)
+	{
+		kill(pid, SIGUSR1);  // 发送8个SIGUSR1（表示8个0）
+		usleep(100);
+	}
+}
+
+// 主函数 - 程序的入口
+int	main(int argc, char **argv)
+{
+	// 检查参数：需要3个参数，且消息不能为空
+	if (argc != 3 || !ft_strlen(argv[2]))
+		return (1);
+	
+	// 显示发送了多少个字符
+	ft_putstr_fd("Sent    : ", 1);
+	ft_putnbr_fd(ft_strlen(argv[2]), 1);
+	ft_putchar_fd('\n', 1);
+	
+	// 准备显示接收确认数
+	ft_putstr_fd("Received: ", 1);
+	
+	// 设置信号处理函数
+	signal(SIGUSR1, action);  // SIGUSR1信号由action函数处理
+	signal(SIGUSR2, action);  // SIGUSR2信号也由action函数处理
+	
+	// 开始发送消息（argv[1]是服务器PID，argv[2]是要发的消息）
+	mt_kill(ft_atoi(argv[1]), argv[2]);
+	
+	// 无限等待，直到收到信号
+	while (1)
+		pause();  // pause()会让程序暂停，直到收到信号
+	
+	return (0);
+}
+
+// 信号处理函数 - 核心逻辑
+static void	action(int sig, siginfo_t *info, void *context)
+{
+	static int				i = 0;          // 当前已接收的bit数（0-7）
+	static pid_t			client_pid = 0; // 当前客户端的PID
+	static unsigned char	c = 0;          // 正在组装的字符
+
+	(void)context;  // 忽略未使用的参数
+	
+	// 如果是第一个信号，记录客户端的PID
+	if (!client_pid)
+		client_pid = info->si_pid;
+	
+	// 将接收到的信号转换为bit：SIGUSR2=1, SIGUSR1=0
+	c |= (sig == SIGUSR2);  // 如果是SIGUSR2，设置当前bit为1
+	
+	if (++i == 8)  // 如果已经收到8个bit（一个完整字符）
+	{
+		i = 0;  // 重置bit计数器
+		
+		if (!c)  // 如果字符是0（空字符，表示消息结束）
+		{
+			kill(client_pid, SIGUSR2);  // 告诉客户端：消息接收完成
+			client_pid = 0;  // 重置客户端PID，准备接收下一个连接
+			return ;
+		}
+		
+		ft_putchar_fd(c, 1);  // 输出接收到的字符
+		c = 0;                // 重置字符缓冲区
+		kill(client_pid, SIGUSR1);  // 告诉客户端：成功接收一个字符
+	}
+	else         // 如果还没收满8个bit
+		c <<= 1; // 左移一位，为下一个bit腾出位置
+}
+
+
+// 主函数
+int	main(void)
+{
+	struct sigaction	s_sigaction;
+
+	// 显示服务器PID，让客户端知道要连接谁
+	ft_putstr_fd("Server PID: ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putchar_fd('\n', 1);
+	
+	// 设置信号处理
+	s_sigaction.sa_sigaction = action;  // 指定处理函数
+	s_sigaction.sa_flags = SA_SIGINFO;  // 使用增强型信号处理
+	sigaction(SIGUSR1, &s_sigaction, 0);  // 注册SIGUSR1处理器
+	sigaction(SIGUSR2, &s_sigaction, 0);  // 注册SIGUSR2处理器
+	
+	// 无限循环，等待信号
+	while (1)
+		pause();  // 暂停程序，直到收到信号
+	
+	return (0);
+}
+

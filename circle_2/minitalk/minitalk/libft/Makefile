@@ -6,12 +6,12 @@
 #    By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/02 15:19:02 by wtang             #+#    #+#              #
-#    Updated: 2025/09/15 16:47:55 by wtang            ###   ########.fr        #
+#    Updated: 2024/12/19 18:37:04 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
 # Define source files for the main part and bonus part
