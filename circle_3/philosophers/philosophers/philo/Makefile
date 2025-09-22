@@ -6,11 +6,10 @@
 #    By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/19 12:08:45 by wtang             #+#    #+#              #
-#    Updated: 2025/09/19 12:30:22 by wtang            ###   ########.fr        #
+#    Updated: 2025/09/22 17:45:23 by wtang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = CC
-CFLAGS = -Wall -Werror -Wextra
-
+CFLAGS = -Wall -Werror -Wextra -pthread -DRD -Helgrind -FSanitise
