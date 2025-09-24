@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:21:25 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/23 18:55:17 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/24 13:04:52 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_philo
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	max_pastas;
-	long	last_pasta_time;
+	long long	last_pasta_time;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_data	*data;
@@ -42,7 +42,7 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_t	*threads;
 	int	philo_count;
-	long	start_time;
+	long long	start_time;
 	int	all_ready;
 } t_data;
 

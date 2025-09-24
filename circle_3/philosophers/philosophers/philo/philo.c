@@ -6,37 +6,67 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:09:01 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/23 18:58:12 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/24 14:19:50 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+long long	ft_get_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+	{
+		write(2, "Error: gettimeofday() failed\n", 29);
+		return (0);
+	}
+	return (time.tv_sec * 1000LL + time.tv_usec / 1000);
+}
 
 void	*ft_routine(void *arg)
 {
-	long	current_time;
 	t_philo *philo = (t_philo *)arg;
+	long long	current_time;
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
 
-	if (philo = NULL)
+	if (philo == NULL)
 		return (NULL);
 	while (philo->data->all_ready == 0)
 		usleep(100);
-	philo->last_pasta_time = 0;
+	philo->last_pasta_time = ft_get_time();
 	while (1)
 	{
+		if ((philo->p_id - 1) < (philo->p_id) % philo->data->philo_count)
+		{
+			first_fork = philo->left_fork;
+			second_fork = philo->right_fork;
+		}
+		else
+		{
+			first_fork = philo->right_fork;
+			second_fork = philo->left_fork;
+		}
+		pthread_mutex_lock(first_fork);
 		current_time = ft_get_time() - philo->data->start_time;
-		pthread_mutex_lock(&philo->left_fork);
-		pthread_mutex_lock(&philo->right_fork);
-		printf("timestamp_in_ms %d has taken a fork", philo->p_id);
-		printf("timestamp_in_ms %d is eating", philo->p_id);
+		printf("%lld %d has taken a fork\n", current_time, philo->p_id);
+		pthread_mutex_lock(second_fork);
+		current_time = ft_get_time() - philo->data->start_time;
+		printf("%lld %d has taken a fork\n", current_time, philo->p_id);
+		philo->last_pasta_time = ft_get_time();
+		current_time = ft_get_time() - philo->data->start_time;
+		printf("%lld %d is eating\n", current_time, philo->p_id);
 		usleep(philo->time_to_eat * 1000);
-		pthread_mutex_unlock(&philo->right_fork);
-		pthread_mutex_unlock(&philo->left_fork);	
-		printf("timestamp_in_ms %d is sleeping", philo->p_id);
+		pthread_mutex_unlock(second_fork);
+		pthread_mutex_unlock(first_fork);
+		current_time = ft_get_time() - philo->data->start_time;
+		printf("%lld %d is sleeping\n", current_time, philo->p_id);
 		usleep(philo->time_to_sleep * 1000);
-		printf("timestamp_in_ms %d is thinking", philo->p_id);
+		current_time = ft_get_time() - philo->data->start_time;
+		printf("%lld %d is thinking\n", current_time, philo->p_id);
 	}
+	return (NULL);
 }
 
 int	main(int ac, char **av)
@@ -51,22 +81,10 @@ int	main(int ac, char **av)
 	if (!ft_create_threads(&data))
 		return (1);
 	
-	printf("timestamp_in_ms %d died", philo->p_id);
+	printf("%lld %d died", ft_get_time(), philo->p_id);
 	
 	pthread_mutex_destroy(&mutex);
 	return (0);
-}
-
-long long	ft_get_time(void)
-{
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-	{
-		write(2, "Error: gettimeofday() failed\n", 29);
-		return (0);
-	}
-	return (time.tv_sec * 1000LL + time.tv_usec / 1000);
 }
 
 int	ft_create_threads(t_data *data)
