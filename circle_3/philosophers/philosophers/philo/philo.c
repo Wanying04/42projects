@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:09:01 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/24 14:19:50 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/24 17:14:42 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,61 @@ long long	ft_get_time(void)
 	return (time.tv_sec * 1000LL + time.tv_usec / 1000);
 }
 
+int	must_stop(t_data *data)
+{
+	int	stop;
+
+	pthread_mutex_lock(&data->finish_mutex);
+	stop = data->stop_simulation;
+	pthread_mutex_unlock(&data->finish_mutex);
+	return (stop);
+}
+
+void	mark_philo_finished(t_data *data, int id)
+{
+	long long	current_time;
+	
+	pthread_mutex_lock(&data->finish_mutex);
+	if (data->pastas_count[id - 1] == 0)
+	{
+		data->pastas_count[id - 1] = 1;
+		data->finished_count++;
+		if (data->finished_count >= data->philo_count)
+			data->stop_simulation = 1;
+	}
+	pthread_mutex_unlock(&data->finish_mutex);
+	current_time = ft_get_time() - data->start_time;
+	printf("%lld They all ate %d times\n", current_time, data->philos->pastas_eaten);
+}
+
+void	*death_checker(void *arg)
+{
+	t_data *data = (t_data *)arg;
+	int	i;
+	long long	current_time;
+	
+	i = 0;
+	while (1)
+	{
+		if (must_stop(data))
+			break;
+		while (i < data->philo_count)
+		{
+			if (ft_get_time() - data->philos[i].last_pasta_time > data->philos->time_to_die)
+			{
+				pthread_mutex_lock(&data->finish_mutex);
+				data->stop_simulation = 1;
+				pthread_mutex_unlock(&data->finish_mutex);
+				current_time = ft_get_time() - data->start_time;
+				printf("%lld %d died\n", current_time, data->philos->p_id);
+				break;
+			}
+		}
+		usleep(1000);
+	}
+	return (NULL);
+}
+
 void	*ft_routine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
@@ -36,8 +91,11 @@ void	*ft_routine(void *arg)
 	while (philo->data->all_ready == 0)
 		usleep(100);
 	philo->last_pasta_time = ft_get_time();
+	philo->pastas_eaten = 0;
 	while (1)
 	{
+		if (must_stop(philo->data))
+			break;
 		if ((philo->p_id - 1) < (philo->p_id) % philo->data->philo_count)
 		{
 			first_fork = philo->left_fork;
@@ -58,8 +116,13 @@ void	*ft_routine(void *arg)
 		current_time = ft_get_time() - philo->data->start_time;
 		printf("%lld %d is eating\n", current_time, philo->p_id);
 		usleep(philo->time_to_eat * 1000);
+		philo->pastas_eaten++;
 		pthread_mutex_unlock(second_fork);
 		pthread_mutex_unlock(first_fork);
+		if (philo->max_pastas > 0 && philo->pastas_eaten >= philo->max_pastas)
+			mark_philo_finished(philo->data, philo->p_id);
+		if (must_stop(philo->data))
+			break;
 		current_time = ft_get_time() - philo->data->start_time;
 		printf("%lld %d is sleeping\n", current_time, philo->p_id);
 		usleep(philo->time_to_sleep * 1000);
@@ -80,10 +143,10 @@ int	main(int ac, char **av)
 		return (1);
 	if (!ft_create_threads(&data))
 		return (1);
+		
+
 	
-	printf("%lld %d died", ft_get_time(), philo->p_id);
-	
-	pthread_mutex_destroy(&mutex);
+	pthread_mutex_destroy();
 	return (0);
 }
 
@@ -110,11 +173,16 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 {
 	int	i;
 
+	
+	data->finished_count = 0;
+	data->stop_simulation = 0;
 	data->philo_count = main_philo->number_of_philosophers;
 	data->philos = malloc(sizeof(t_philo) * data->philo_count);
 	data->threads = malloc(sizeof(pthread_t) * data->philo_count);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);
-	if (!data->philos || !data->threads || !data->forks)
+	data->pastas_count = malloc(sizeof(int) * data->philo_count);
+	memset(data->pastas_count, 0, sizeof(int) * data->philo_count);
+	if (!data->philos || !data->threads || !data->forks || !data->pastas_count)
 		return (0);
 	i = 0;
 	while (i < data->philo_count)
@@ -131,6 +199,7 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 		data->philos[i].right_fork = &data->forks[(i + 1) % data->philo_count];
 		i++;
 	}
+	pthread_mutex_init(&data->finish_mutex, NULL);
 	return (1);
 }
 
