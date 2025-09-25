@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:09:01 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/24 17:14:42 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/25 16:49:22 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ void	mark_philo_finished(t_data *data, int id)
 		data->pastas_count[id - 1] = 1;
 		data->finished_count++;
 		if (data->finished_count >= data->philo_count)
+		{
 			data->stop_simulation = 1;
+			current_time = ft_get_time() - data->start_time;
+			printf("%lld They all ate %d pastas\n", current_time, data->philos->pastas_eaten);
+		}
 	}
 	pthread_mutex_unlock(&data->finish_mutex);
-	current_time = ft_get_time() - data->start_time;
-	printf("%lld They all ate %d times\n", current_time, data->philos->pastas_eaten);
 }
 
 void	*death_checker(void *arg)
@@ -56,33 +58,63 @@ void	*death_checker(void *arg)
 	t_data *data = (t_data *)arg;
 	int	i;
 	long long	current_time;
-	
-	i = 0;
-	while (1)
+	long long	time_since_last_meal;
+	long long 	last_check_time;
+	long long	elapsed_time;
+
+	last_check_time = ft_get_time();
+	while (!must_stop(data))
 	{
-		if (must_stop(data))
-			break;
-		while (i < data->philo_count)
+		current_time = ft_get_time();
+		elapsed_time = current_time - last_check_time;
+		if (elapsed_time >= 10)
 		{
-			if (ft_get_time() - data->philos[i].last_pasta_time > data->philos->time_to_die)
+			i = 0;
+			while (i < data->philo_count && !must_stop(data))
 			{
-				pthread_mutex_lock(&data->finish_mutex);
-				data->stop_simulation = 1;
-				pthread_mutex_unlock(&data->finish_mutex);
-				current_time = ft_get_time() - data->start_time;
-				printf("%lld %d died\n", current_time, data->philos->p_id);
-				break;
+				pthread_mutex_lock(&data->pasta_mutex);
+				time_since_last_meal = ft_get_time() - data->philos[i].last_pasta_time;
+				pthread_mutex_unlock(&data->pasta_mutex);
+				if (time_since_last_meal > data->philos->time_to_die)
+				{
+					pthread_mutex_lock(&data->finish_mutex);
+					if (!data->stop_simulation)
+					{
+						data->stop_simulation = 1;
+						printf("%lld %d died\n", current_time - data->start_time, data->philos[i].p_id);
+					}
+					pthread_mutex_unlock(&data->finish_mutex);
+					break;
+				}
+				i++;
 			}
+			last_check_time = current_time;
 		}
-		usleep(1000);
+		else
+			usleep((10 - elapsed_time) * 1000);
 	}
 	return (NULL);
+}
+
+void	print_status(t_philo *philo, const char *status)
+{
+	static pthread_mutex_t	status_mutex = PTHREAD_MUTEX_INITIALIZER;
+	long long	current_time;
+
+	if (must_stop(philo->data))
+		return;
+	pthread_mutex_lock(&status_mutex);
+	if (!must_stop(philo->data))
+	{
+		current_time = ft_get_time() - philo->data->start_time;
+		printf("%lld %d %s\n", current_time, philo->p_id, status);
+	}
+	pthread_mutex_unlock(&status_mutex);
 }
 
 void	*ft_routine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
-	long long	current_time;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 
@@ -107,14 +139,13 @@ void	*ft_routine(void *arg)
 			second_fork = philo->left_fork;
 		}
 		pthread_mutex_lock(first_fork);
-		current_time = ft_get_time() - philo->data->start_time;
-		printf("%lld %d has taken a fork\n", current_time, philo->p_id);
+		printf_status(philo, "has taken a fork\n");
 		pthread_mutex_lock(second_fork);
-		current_time = ft_get_time() - philo->data->start_time;
-		printf("%lld %d has taken a fork\n", current_time, philo->p_id);
+		printf_status(philo, "has taken a fork\n");
+		pthread_mutex_lock(&philo->data->pasta_mutex);
 		philo->last_pasta_time = ft_get_time();
-		current_time = ft_get_time() - philo->data->start_time;
-		printf("%lld %d is eating\n", current_time, philo->p_id);
+		pthread_mutex_unlock(&philo->data->pasta_mutex);
+		printf_status(philo, "is eating\n");
 		usleep(philo->time_to_eat * 1000);
 		philo->pastas_eaten++;
 		pthread_mutex_unlock(second_fork);
@@ -123,13 +154,45 @@ void	*ft_routine(void *arg)
 			mark_philo_finished(philo->data, philo->p_id);
 		if (must_stop(philo->data))
 			break;
-		current_time = ft_get_time() - philo->data->start_time;
-		printf("%lld %d is sleeping\n", current_time, philo->p_id);
+		printf_status(philo, "is sleeping\n");
 		usleep(philo->time_to_sleep * 1000);
-		current_time = ft_get_time() - philo->data->start_time;
-		printf("%lld %d is thinking\n", current_time, philo->p_id);
+		printf_status(philo, "is thinking\n");
 	}
 	return (NULL);
+}
+
+void	ft_clean_up(t_data *data)
+{
+	int	i;
+	
+	if (!data)
+		return;
+	i = 0;
+	while (i < data->philo_count)
+	{
+		if (data->threads && data->threads[i] != 0)
+			pthread_join(data->threads[i], NULL);
+		i++;
+	}
+	i = 0;
+	while (i < data->philo_count)
+	{
+		if (data->forks && &data->forks[i] != NULL)
+			pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	if (data->finish_mutex_initialized)
+		pthread_mutex_destroy(&data->finish_mutex);
+	if (data->pasta_mutex_initialized)
+		pthread_mutex_destroy(&data->pasta_mutex);
+	if (data->philos)
+		free(data->philos);
+	if (data->forks)
+		free(data->forks);
+	if (data->threads)
+		free(data->threads);
+	if (data->pastas_count)
+		free(data->pastas_count);
 }
 
 int	main(int ac, char **av)
@@ -142,11 +205,11 @@ int	main(int ac, char **av)
 	if (!ft_init_simulation(&data, &main_philo))
 		return (1);
 	if (!ft_create_threads(&data))
+	{
+		ft_clean_up(&data);
 		return (1);
-		
-
-	
-	pthread_mutex_destroy();
+	}
+	ft_clean_up(&data);
 	return (0);
 }
 
@@ -173,7 +236,6 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 {
 	int	i;
 
-	
 	data->finished_count = 0;
 	data->stop_simulation = 0;
 	data->philo_count = main_philo->number_of_philosophers;
@@ -200,6 +262,9 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 		i++;
 	}
 	pthread_mutex_init(&data->finish_mutex, NULL);
+	data->finish_mutex_initialized = 1;
+	pthread_mutex_init(&data->pasta_mutex, NULL);
+	data->pasta_mutex_initialized = 1;
 	return (1);
 }
 

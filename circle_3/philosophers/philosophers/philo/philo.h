@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:21:25 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/24 16:23:42 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/25 17:01:47 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,23 @@ typedef struct s_data
 	int	finished_count;
 	pthread_mutex_t	finish_mutex;
 	int	stop_simulation;
+	pthread_mutex_t	pasta_mutex;
+	int	finish_mutex_initialized;
+	int	pasta_mutex_initialized;
 } t_data;
+
+long long	ft_get_time(void);
+int	must_stop(t_data *data);
+void	mark_philo_finished(t_data *data, int id);
+void	*death_checker(void *arg);
+void	print_status(t_philo *philo, const char *status);
+void	*ft_routine(void *arg);
+void	ft_clean_up(t_data *data);
+int	ft_create_threads(t_data *data);
+int	ft_init_simulation(t_data *data, t_philo *main_philo);
+int	ft_init_philo(int ac, char **av, t_philo *main_philo);
+int	ft_check_args(int ac, char *av[]);
+int	ft_isdigit(int c);
+int	ft_atoi(const char *nptr);
 
 #endif
