@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:09:01 by wtang             #+#    #+#             */
-/*   Updated: 2025/09/25 16:49:22 by wtang            ###   ########.fr       */
+/*   Updated: 2025/09/25 17:14:29 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,13 +139,13 @@ void	*ft_routine(void *arg)
 			second_fork = philo->left_fork;
 		}
 		pthread_mutex_lock(first_fork);
-		printf_status(philo, "has taken a fork\n");
+		print_status(philo, "has taken a fork\n");
 		pthread_mutex_lock(second_fork);
-		printf_status(philo, "has taken a fork\n");
+		print_status(philo, "has taken a fork\n");
 		pthread_mutex_lock(&philo->data->pasta_mutex);
 		philo->last_pasta_time = ft_get_time();
 		pthread_mutex_unlock(&philo->data->pasta_mutex);
-		printf_status(philo, "is eating\n");
+		print_status(philo, "is eating\n");
 		usleep(philo->time_to_eat * 1000);
 		philo->pastas_eaten++;
 		pthread_mutex_unlock(second_fork);
@@ -154,9 +154,9 @@ void	*ft_routine(void *arg)
 			mark_philo_finished(philo->data, philo->p_id);
 		if (must_stop(philo->data))
 			break;
-		printf_status(philo, "is sleeping\n");
+		print_status(philo, "is sleeping\n");
 		usleep(philo->time_to_sleep * 1000);
-		printf_status(philo, "is thinking\n");
+		print_status(philo, "is thinking\n");
 	}
 	return (NULL);
 }
@@ -243,9 +243,9 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 	data->threads = malloc(sizeof(pthread_t) * data->philo_count);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);
 	data->pastas_count = malloc(sizeof(int) * data->philo_count);
-	memset(data->pastas_count, 0, sizeof(int) * data->philo_count);
 	if (!data->philos || !data->threads || !data->forks || !data->pastas_count)
 		return (0);
+	memset(data->pastas_count, 0, sizeof(int) * data->philo_count);
 	i = 0;
 	while (i < data->philo_count)
 	{
@@ -259,6 +259,7 @@ int	ft_init_simulation(t_data *data, t_philo *main_philo)
 		data->philos[i].p_id = i + 1;
 		data->philos[i].left_fork = &data->forks[i];
 		data->philos[i].right_fork = &data->forks[(i + 1) % data->philo_count];
+		data->philos[i].data = data; // critical: set back-reference so threads can access shared data
 		i++;
 	}
 	pthread_mutex_init(&data->finish_mutex, NULL);
