@@ -140,11 +140,13 @@ number_of_philosophers time_to_die time_to_eat time_to_sleep
 任何其他编号为 N 的哲学家都将位于编号为 N - 1 和编号为 N + 1 的哲学家之间。
 你的程序记录：
 • 哲学家状态的任何变化都必须遵循以下格式：
-◦ timestamp_in_ms X 已拿起叉子
-◦ timestamp_in_ms X 正在进食
-◦ timestamp_in_ms X 正在睡觉
-◦ timestamp_in_ms X 正在思考
-◦ timestamp_in_ms X 已死亡
+
+◦ timestamp_in_ms X has taken a fork
+◦ timestamp_in_ms X is eating
+◦ timestamp_in_ms X is sleeping
+◦ timestamp_in_ms X is thinking
+◦ timestamp_in_ms X died
+
 将 timestamp_in_ms 替换为当前时间戳（以毫秒为单位），
 并将 X 替换为哲学家的编号。
 • 打印的状态不得被其他哲学家的状态破坏或更改。
