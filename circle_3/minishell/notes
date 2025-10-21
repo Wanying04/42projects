@@ -1,0 +1,361 @@
+内建命令(built-ins)
+
+(NOT OUR TASK) 在 Linux shell 中，你可以定义一个与内建命令同名的函数，但要执行真正的内建命令，需要使用 builtin 命令. 当你定义了一个与内建命令（如 echo 或 cd）同名的函数时，直接调用该函数名会执行你定义的函数，而不是 shell 的内建功能. 使用 builtin 命令可以强制 shell 忽略你定义的函数，执行它本来的内建功能.
+
+
+----------
+echo (-n)
+功能：输出文本
+
+echo "hello"        # 输出: hello ;默认在输出后添加换行符
+echo -n "hello"     # 输出: hello (不换行) ;-n 选项：抑制末尾的换行符
+
+支持多个参数：
+echo 1 2 3 4 5             # 输出: 1 2 3 4 5
+echo "hello" "world"       # 输出: hello world
+echo -n hello world        # 输出: hello world (不换行)
+echo -n "line1" "line2"    # 输出: line1line2 (不换行)
+
+$ echo "X""Y" hello
+XY hello          # 相邻引号会拼接
+
+多个参数自动用单个空格分隔
+引号在参数解析阶段就被去除，echo 看不到引号
+echo "" hello 输出 hello（有个空格）
+echo -n 输出空字符串但不换行
+
+
+----------
+cd 只支持相对路径或绝对路径
+功能：改变当前工作目录
+
+cd /home/user      # 绝对路径
+cd Documents       # 相对路径
+cd ..              # 相对路径
+cd ./src           # 相对路径
+
+不支持的：
+cd                      # 无参数（应该报错）❌
+cd ~                    # 家目录（应该报错）❌
+cd -                    # 上一个目录（应该报错）❌
+
+只处理路径参数，不需要支持选项
+需要处理 cd（无参数）的情况
+
+使用 chdir() 系统调用 
+#include <unistd.h>
+int chdir(const char *path);
+const char *path：要切换到的目录路径
+返回值：
+成功：返回 0
+失败：返回 -1 并设置 errno
+
+perror
+#include <stdio.h>
+void perror(const char *s);
+执行过程：
+先打印你提供的字符串 "cd"
+然后自动添加冒号和空格 ": "
+最后添加对应的错误信息
+
+
+----------
+pwd 无选项
+功能：打印当前工作目录
+
+pwd                # 输出: /current/directory/path
+
+使用 getcwd() 系统调用
+#include <unistd.h>
+char *getcwd(char *buf, size_t size);
+参数：
+char *buf：存储当前工作目录的缓冲区
+size_t size：缓冲区的大小
+返回值：
+成功：返回指向缓冲区的指针（通常是 buf）
+失败：返回 NULL 并设置 errno
+
+
+----------
+环境变量就是一些键值对(key-value pairs)，用来存储系统的配置信息。
+
+echo $PATH            # 查看PATH变量
+export NAME=value     # 设置环境变量
+unset NAME            # 删除环境变量
+env                   # 显示所有环境变量
+
+环境变量是操作系统中用于指定运行环境的参数
+环境变量是整个电脑操作系统的妈妈变量
+环境变量可以分为系统变量（影响所有用户）和用户变量（仅影响特定用户）。
+在C语言中环境变量存储在 char **environ 全局变量 (which we can not use) 中
+我们需要在minishell内部维护自己的环境变量列表，因为用户可能用export添加新变量，用unset删除变量，这些改动只应该在minishell内部生效
+环境变量本质上就是一个字符串数组的管理问题！
+
+1. 字符串格式：
+必须是 "变量名=变量值" 格式
+变量名不能包含=
+变量值可以包含任何字符
+
+2. 内存管理：
+用malloc分配新字符串
+用free释放不再需要的字符串
+注意内存泄漏
+
+3. 数组管理：
+保持数组以NULL结尾
+添加时检查是否超过最大数量
+删除时要移动后续元素
+
+extern 是一个关键字，意思是 "这个变量在别处定义，我在这里只是声明它"。
+environ 是 系统已经定义好的全局变量，在C库中已经存在
+#include <stdlib.h> / #include <unistd.h>  // 通常environ在stdlib.h中声明了
+// 或者
+extern char **environ;  // 显式声明
+
+
+----------
+export 无选项
+功能：设置环境变量
+
+export MY_VAR=value
+export PATH=/new/path:$PATH
+
+格式：export NAME=value
+需要更新shell的环境变量列表
+
+
+----------
+unset 无选项
+功能：删除环境变量
+
+unset MY_VAR
+unset PATH
+
+从环境变量列表中移除指定变量
+
+
+----------
+env 无选项、无参数
+功能：显示所有环境变量
+
+env
+
+简单打印所有环境变量
+
+
+----------
+exit 无选项
+功能：退出shell
+
+exit
+exit 42           # 带退出码
+
+可选参数：退出状态码（默认为0）
+不处理选项：像 exit --help 或 exit -n 应该报错
+退出码范围：在真正的bash中，退出状态码超出范围时会自动取模
+直接退出：使用 exit() 而不是 return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. fork()
+Shell, User mode and kernel mode, child progress, parent progress
+Under what circumstances will the shell generate a subprocess?
+
+这是42学校的项目吗？如果是的话，Minishell肯定是一个两人小组的项目。一个人负责解析，另一个人负责执行。（通常就是这样的。）
+
+如果您还想完成一些额外的工作（处理通配符和逻辑运算符），解析部分将会更加困难。对于执行部分，您需要了解二叉树的工作原理。示例：Echo hello && echo hello --> 在这种情况下，二叉树的根节点是 &&，在左侧您会找到 echo hello，而在右侧您会找到 echo hello。
+
+解析部分负责创建树，执行部分负责导航和执行树。
+
+除此之外，您还需要很好地理解 C 语言中进程的工作原理。即文件描述符 (fds)、fork、管道等的工作原理。
+
+我建议你先了解每个提供的函数的功能，然后用 readline 创建一个简单的提示符。设置完成后，就可以开始了。我个人先完成了执行器部分，先从内置命令开始，再用路径查找器查找 PATH 环境变量中未内置的命令，最后才开始执行执行器。
+
+同学A的具体任务清单：
+第一周任务：
+实现基础令牌分割
+
+处理简单命令: ls -l
+
+识别重定向符号: > < >>
+
+识别管道符号: |
+
+第二周任务：
+实现引号处理（单引号、双引号）
+
+处理转义字符 \
+
+实现变量扩展 $VAR
+
+构建命令数据结构
+
+第三周任务：
+语法错误检测
+
+处理here document <<
+
+内存管理：释放解析器分配的内存
+
+边界情况处理
+
+同学B的具体任务清单：
+第一周任务：
+实现简单命令执行 ls, pwd
+
+实现内建命令 echo, pwd, cd
+
+基础进程管理 fork(), execve(), waitpid()
+
+第二周任务：
+实现输入/输出重定向 <, >
+
+实现管道 |（单个管道）
+
+实现 exit, env 命令
+
+处理文件描述符泄漏
+
+第三周任务：
+实现追加重定向 >>
+
+实现here document <<
+
+信号处理 Ctrl+C, Ctrl+\, Ctrl+D
+
+多管道支持 cmd1 | cmd2 | cmd3
+
+数据结构接口：
+c
+// 同学A提供的数据结构
+typedef struct s_command {
+    char **args;           // 命令和参数
+    char *input_file;      // 输入文件（NULL表示无）
+    char *output_file;     // 输出文件（NULL表示无）
+    int append_mode;       // 输出是否追加
+    char *heredoc_delimiter; // here document分界符
+    struct s_command *next;  // 管道下一个命令
+} t_command;
+
+// 同学A提供的函数
+t_command *parse_input(char *input);
+void free_commands(t_command *cmd);
+执行器接口：
+c
+// 同学B提供的函数  
+int execute_commands(t_command *cmd);
+int execute_builtin(char **args);
+void setup_redirections(t_command *cmd);
+
+同学B：执行器部分
+核心职责：执行解析后的命令结构
+1. 进程执行管理
+c
+// 执行外部命令流程：
+1. fork() 创建子进程
+2. 在子进程中:
+   - 设置重定向 (dup2)
+   - execve() 执行命令
+3. 在父进程中:
+   - waitpid() 等待子进程结束
+   - 收集退出状态
+
+// 示例执行: ls -l
+pid_t pid = fork();
+if (pid == 0) {
+    // 子进程
+    execve("/bin/ls", {"ls", "-l", NULL}, environ);
+} else {
+    // 父进程  
+    waitpid(pid, &status, 0);
+}
+2. 内建命令实现
+c
+// 必须实现的内建命令：
+- cd:     改变工作目录
+- echo:   输出文本，支持 -n 选项
+- pwd:    打印当前目录
+- export: 设置环境变量
+- unset:  取消环境变量
+- env:    显示环境变量
+- exit:   退出shell
+
+// 示例：cd 命令实现
+int builtin_cd(char **args) {
+    if (args[1] == NULL) {
+        chdir(getenv("HOME"));
+    } else {
+        if (chdir(args[1]) != 0) {
+            perror("cd");
+            return 1;
+        }
+    }
+    return 0;
+}
+3. 重定向处理
+c
+// 处理所有重定向类型：
+- 输入重定向:    cmd < file.txt
+- 输出重定向:    cmd > file.txt  
+- 追加重定向:    cmd >> file.txt
+- here document: cmd << EOF
+
+// 重定向执行流程：
+1. 打开文件获取fd
+2. 使用dup2重定向stdin/stdout
+3. 执行命令
+4. 恢复原来的stdin/stdout
+4. 管道实现
+c
+// 处理: cmd1 | cmd2 | cmd3
+int pipefd[2];
+pipe(pipefd);
+
+// 第一个命令：输出重定向到管道
+dup2(pipefd[1], STDOUT_FILENO);
+close(pipefd[1]);
+
+// 第二个命令：输入来自管道  
+dup2(pipefd[0], STDIN_FILENO);
+close(pipefd[0]);
+5. 信号处理
+c
+// 关键信号处理：
+- SIGINT (Ctrl+C):  中断当前命令
+- SIGQUIT (Ctrl+\): 退出当前命令
+- EOF (Ctrl+D):     退出shell
+
+void handle_sigint(int sig) {
+    write(1, "\nminishell> ", 12);
+}
