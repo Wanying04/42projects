@@ -1,0 +1,7 @@
+ft_strchr
+ft_memcpy
+ft_strlen
+str_append_mem
+str_append_str
+ft_memmove
+get_next_line
