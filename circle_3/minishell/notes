@@ -1,3 +1,354 @@
+命令类型判断
+    ↓
+1. 单个命令
+    ├─ 1.1 内部命令
+    └─ 1.2 外部命令
+
+2. 多个命令（管道）
+    ├─ 2.1 处理管道连接
+    └─ 2.2 对管道中的每个命令：
+            ├─ 2.2.1 如果是内部命令 → 复用 1.1
+            └─ 2.2.2 如果是外部命令 → 复用 1.2
+
+Command Type Determination
+    ↓
+1. Single Command
+    ├─ 1.1 Built-in
+    └─ 1.2 External
+
+2. Multiple Commands (Pipelines)
+    ├─ 2.1 Process pipeline connections
+    └─ 2.2 For each command in pipeline:
+            ├─ 2.2.1 If built-in → Reuse 1.1
+            └─ 2.2.2 If external → Reuse 1.2
+
+
+circle 4:
+netpractice  V
+cub3d        V
+cpp 00-04    X
+exam 04      V
+
+circle 5:
+cpp 05-09    X
+inception    V
+exam 05      X
+
+circle 6:
+transferance X
+exam 06      X
+
+exam 04 -- 
+
+
+
+
+
+wtang@c3r2s2:~/minishell$ echo bonjour ; |
+bash: syntax error near unexpected token `|'
+# 错误：管道符 | 前面必须有命令
+
+minishell$ echo bonjour ; |
+bonjour ;
+# 输出：bonjour ;
+# 管道符被当作普通参数处理
+问题原因： minishell 没有正确识别管道符号作为特殊运算符，而是将其当作普通字符串参数。
+----------------------------------------
+
+wtang@c3r2s2:~$ echo -n -n -nnnn -nnnnm
+-nnnnmwtang@c3r2s2:~$ 
+# 输出：-nnnnm（所有 -n 选项都被识别，最后一个参数正常输出）
+
+minishell$ echo -n -n -nnnn -nnnnm
+-n -nnnn -nnnnmminishell$ 
+# 输出：-n -nnnn -nnnnm（没有识别 -n 选项）
+要求："实现 echo 带 -n 选项"
+你的 echo 没有正确识别 -n 选项
+需要修复：连续多个 -n 应该被识别为选项，只有最后一个非选项参数才输出
+----------------------------------------
+
+wtang@c3r2s2:~$ unset var1 # with undefined var1
+wtang@c3r2s2:~$ 
+# 静默成功，无错误
+
+minishell$ unset var1 # with undefined var1
+unset: not a valid identifier
+# 错误：not a valid identifier
+要求："实现 unset 不带选项"
+标准行为：unset 未定义的变量应该静默成功
+需要修复：unset 应该能够处理未定义的变量而不报错
+----------------------------------------
+
+wtang@c3r2s2:~$ echo test > file test1
+wtang@c3r2s2:~$
+# 创建文件 "file"，内容为 "test"
+# 在终端输出 "test1"
+
+minishell$ echo test > file test1
+test test1
+# 输出：test test1
+# 没有重定向
+要求明确说明要实现重定向：> 必须重定向输出
+你的 minishell 没有识别重定向符号，而是将其当作普通参数
+必须修复：echo test > file 应该创建文件 "file" 并写入 "test"
+----------------------------------------
+
+wtang@c3r2s2:~$ env puis export puis env # vars aren't sorted
+env: ‘puis’: No such file or directory
+# 执行：env，然后 export，然后 env
+# 注释被忽略
+
+minishell$ env puis export puis env # vars aren't sorted
+minishell: syntax error: unclosed quotes
+# 错误：unclosed quotes
+要求明确说明："不要解释未闭合的引号
+你的 minishell 错误地将 # 后面的内容当作未闭合引号
+必须修复：正确处理注释符号 #，它后面的内容应该被忽略
+----------------------------------------
+
+wtang@c3r2s2:~$ echo 2 >> out1 > out2
+wtang@c3r2s2:~$
+# 标准 bash: 无输出，正确重定向
+
+minishell$ echo 2 >> out1 > out2
+2
+# 你的 minishell: 输出 "2"，重定向可能有问题
+问题原因：重定向执行顺序或文件描述符管理不正确。bash 会按照从左到右处理重定向，最终输出应该被重定向到文件。
+----------------------------------------
+
+wtang@c3r2s2:~$ echo 2 > out1 >> out2
+wtang@c3r2s2:~$ 
+# 错误：语法错误，不能同时使用 > 和 >>
+
+minishell$ echo 2 > out1 >> out2
+2
+# 输出：2 （应该报错）
+语法错误处理：要求中虽然没有明确说，但 bash 会拒绝这种语法错误
+重定向冲突：一个命令不能同时有多个输出重定向
+符合 bash 参考：要求说"如有疑问，参考 bash"
+----------------------------------------
+
+wtang@c3r2s2:~$ export var; export var=test
+wtang@c3r2s2:~$
+
+minishell$ export var; export var=test
+export: not a valid identifier
+说明：你的 minishell 对 export 的参数验证比 bash 更严格，这是可以接受的。
+----------------------------------------
+
+wtang@c3r2s2:~$ echo bonjour > $test # with test not defined
+bash: $test: ambiguous redirect
+# 标准 bash: 明确的错误信息
+
+minishell$ echo bonjour > $test # with test not defined
+bonjour # with test not defined
+# 你的 minishell: 执行了 echo，重定向失败
+问题原因：当 $test 为空或未定义时，重定向文件名变成空字符串，应该报错而不是忽略重定向。
+----------------------------------------
+
+wtang@c3r2s2:/$ $bla # with bla not defined
+wtang@c3r2s2:/$
+# Bash: 未定义变量扩展为空字符串
+
+minishell$ $bla # with bla not defined
+Permission denied
+# 错误处理不正确
+修复要求：环境变量 $? 和变量扩展是必须实现的功能
+----------------------------------------
+
+wtang@c3r2s2:/$ c$var Makefile # with var=at
+Test project /
+Cannot create directory //Testing/Temporary
+Cannot create log file: LastTest.log
+No tests were found!!!
+# Bash: c + $var = cat
+
+minishell$ c$var Makefile # with var=at
+c: command not found
+# 你的 minishell: 当作命令 "c"
+修复要求：变量扩展必须正确拼接
+----------------------------------------
+
+wtang@c3r2s2:/$ $LESS$VAR
+wtang@c3r2s2:/$
+
+minishell$ $LESS$VAR
+Permission denied
+# 符合要求：尝试执行不存在的命令
+----------------------------------------
+
+wtang@c3r2s2:/$ echo bonjour > $test w/ t
+bash: ici=coucou: Permission denied
+# 错误：$test 被扩展为变量，如果 test="ici=coucou"
+# 会尝试创建名为 "ici=coucou" 的文件，但权限被拒绝
+
+minishell$ echo bonjour > $test w/ t
+bonjour w/ t
+# 输出：bonjour w/ t
+# $test 没有被扩展为环境变量
+"管理必须扩展为其值的环境变量（$ 后跟字符）"
+"管理 $?，它必须扩展为管道中执行的最近命令的退出状态"
+----------------------------------------
+
+wtang@c3r2s2:/$ cat diufosgid # check exit code
+cat: diufosgid: No such file or directory
+
+minishell$ cat diufosgid # check exit code
+cat: diufosgid: No such file or directory
+cat: '#': No such file or directory
+cat: check: No such file or directory
+cat: exit: No such file or directory
+cat: code: No such file or directory
+# 把 # 后面的内容都当作参数了
+应该： # 后面的内容应该被忽略
+----------------------------------------
+
+wtang@c3r2s2:/$ exit # should return the last exit code value
+exit
+
+minishell$ exit # should return the last exit code value
+exit: too many arguments
+# 错误：把注释当作参数了
+----------------------------------------
+
+wtang@c3r2s2:~$ ;
+bash: syntax error near unexpected token `;'
+
+minishell$ ;
+;: command not found
+# 符合要求：分号不解释为分隔符
+----------------------------------------
+
+wtang@c3r2s2:~$ echo '$HOME'
+$HOME
+# 应该输出: $HOME
+
+minishell$ echo '$HOME'
+/home/wtang
+# 错误：单引号内不应扩展变量
+----------------------------------------
+
+export ; env # display is different for both commands
+# export: 显示所有导出变量（格式：declare -x VAR=value）
+# env: 显示所有环境变量（格式：VAR=value）
+
+minishell$ export ; env # display is different for both commands
+export: not a valid identifier
+你的 minishell 错误地将 ; 后面的内容当作 export 的参数
+虽然要求说"不要解释分号"，但这仅适用于shell语法层面
+对于内置命令的参数解析，分号应该被当作普通字符
+你的 export 命令错误地将 ; env # display... 整个字符串当作一个变量名
+export 内置命令
+无参数时：显示所有导出变量
+有参数时：设置导出变量
+正确处理参数边界
+确保内置命令只接收自己的参数，不错误包含后续文本
+分号在命令参数中应保持为字面字符
+----------------------------------------
+
+wtang@c3r2s2:~$ > log echo coucou
+wtang@c3r2s2:~$
+# 正确：先重定向到log文件，再执行echo
+
+minishell$ > log echo coucou
+coucou
+# 错误：直接输出到终端，没有重定向
+问题原因：重定向解析顺序错误，应该在命令执行前处理重定向。
+----------------------------------------
+
+wtang@c3r2s2:~$ echo "\"
+> ^C
+ # 等待继续输入（多行输入）
+
+minishell$ echo "\"
+minishell: syntax error: unclosed quotes
+# 直接报语法错误
+问题原因：要求中说"不要解释未闭合的引号"，但应该等待用户继续输入而不是直接报错。
+----------------------------------------
+
+wtang@c3r2s2:~$ echo "\n \n \n"
+\n \n \n
+
+minishell$ echo "\n \n \n"
+minishell: syntax error: invalid escape sequence
+
+wtang@c3r2s2:~$ echo "\n \n \\n"
+\n \n \n
+
+minishell$ echo "\n \n \\n"
+minishell: syntax error: invalid escape sequence
+# 你的行为是正确的（符合要求）：不解释反斜杠
+----------------------------------------
+
+wtang@c3r2s2:~$ echo ;;
+bash: syntax error near unexpected token `;;'
+
+minishell$ echo ;;
+;;
+# 你的行为是正确的（符合要求）：输出 ;;（不解释分号）
+----------------------------------------
+
+wtang@c3r2s2:/$ echo $?
+130
+
+minishell$ echo $?
+$?
+管理 $?，它必须扩展为管道中执行的最近命令的退出状态
+----------------------------------------
+
+wtang@c3r2s2:/$ > a ls > b < Makefile
+bash: a: Permission denied
+
+minishell$ > a ls > b < Makefile
+open: Permission denied
+你的 minishell：open: Permission denied（部分正确）
+但应该更优雅地处理，可能需要在执行命令前检查重定向权限
+----------------------------------------
+
+wtang@c3r2s2:/$ echo > a Hello World!
+bash: a: Permission denied
+
+minishell$ echo > a Hello World!
+Hello World!
+
+minishell$ > a echo Hello World!
+Hello World!
+你的 minishell：在权限被拒绝时仍然执行了 echo
+正确行为：如果重定向失败，整个命令应该失败
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --------------------
 --------------------
 内建命令(built-ins)
@@ -372,6 +723,18 @@ exit(127) 是 Unix 约定的“命令未找到”错误码。
 
 
 
+
+<< e >> a.txt
+
+<< e >> echo >> a.txt
+
+echo >> b.txt << a
+
+echo << e >> c.txt
+
+echo hola << e >> d.txt
+
+<< a << b << c
 
 
 
