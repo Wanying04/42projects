@@ -9,18 +9,6 @@ bonjour ;
 Problema: minishell no reconoce correctamente el símbolo de tubería como operador especial, sino como cadena normal.
 ----------------------------------------
 
-wtang@c3r2s2:~$ echo -n -n -nnnn -nnnnm
--nnnnmwtang@c3r2s2:~$ 
-# Salida: -nnnnm (todas las opciones -n reconocidas, último parámetro normal)
-
-minishell$ echo -n -n -nnnn -nnnnm
--n -nnnn -nnnnmminishell$ 
-# Salida: -n -nnnn -nnnnm (no reconoce opción -n)
-Requisito: "implementar echo con opción -n"
-Tu echo no reconoce correctamente la opción -n
-Necesita reparación: múltiples -n consecutivos deben reconocerse como opciones
-----------------------------------------
-
 wtang@c3r2s2:~$ unset var1 # con var1 indefinida
 wtang@c3r2s2:~$ 
 # Éxito silencioso, sin error
@@ -31,20 +19,6 @@ unset: not a valid identifier
 Requisito: "implementar unset sin opciones"
 Comportamiento estándar: unset de variable indefinida debe tener éxito silencioso
 Necesita reparación: unset debe manejar variables indefinidas sin error
-----------------------------------------
-
-wtang@c3r2s2:~$ echo test > file test1
-wtang@c3r2s2:~$
-# Crea archivo "file" con contenido "test"
-# En terminal muestra "test1"
-
-minishell$ echo test > file test1
-test test1
-# Salida: test test1
-# Sin redirección
-Requisito explícito: implementar redirecciones: > debe redirigir salida
-Tu minishell no reconoce símbolos de redirección, los trata como parámetros normales
-Debe repararse: echo test > file debe crear archivo "file" con "test"
 ----------------------------------------
 
 wtang@c3r2s2:~$ env puis export puis env # vars no ordenadas
@@ -60,27 +34,6 @@ Tu minishell trata incorrectamente el contenido después de # como comillas sin 
 Debe repararse: manejar correctamente símbolo de comentario #, ignorar contenido posterior
 ----------------------------------------
 
-wtang@c3r2s2:~$ echo 2 >> out1 > out2
-wtang@c3r2s2:~$
-# Bash estándar: sin salida, redirección correcta
-
-minishell$ echo 2 >> out1 > out2
-2
-# Tu minishell: muestra "2", posible problema de redirección
-Problema: orden de ejecución de redirecciones o gestión de descriptores incorrecta
-----------------------------------------
-
-wtang@c3r2s2:~$ echo 2 > out1 >> out2
-wtang@c3r2s2:~$ 
-# Error: sintaxis incorrecta, no puede usar > y >> simultáneamente
-
-minishell$ echo 2 > out1 >> out2
-2
-# Salida: 2 (debería dar error)
-Manejo de error de sintaxis: aunque no explícito en requisitos, bash rechaza esto
-Conflicto de redirección: un comando no puede tener múltiples redirecciones de salida
-Referencia bash: requisito dice "en caso de dudas, usar bash como referencia"
-----------------------------------------
 
 wtang@c3r2s2:~$ export var; export var=test
 wtang@c3r2s2:~$
@@ -98,37 +51,6 @@ minishell$ echo bonjour > $test # con test no definido
 bonjour # with test not defined
 # Tu minishell: ejecutó echo, redirección falló
 Problema: cuando $test está vacío o indefinido, nombre de archivo se vuelve cadena vacía
-----------------------------------------
-
-wtang@c3r2s2:/$ $bla # con bla no definido
-wtang@c3r2s2:/$
-# Bash: variable indefinida expande a cadena vacía
-
-minishell$ $bla # con bla no definido
-Permission denied
-# Manejo de error incorrecto
-Reparación requerida: variables de entorno $? y expansión son funcionalidades obligatorias
-----------------------------------------
-
-wtang@c3r2s2:/$ c$var Makefile # con var=at
-Test project /
-Cannot create directory //Testing/Temporary
-Cannot create log file: LastTest.log
-No tests were found!!!
-# Bash: c + $var = cat
-
-minishell$ c$var Makefile # con var=at
-c: command not found
-# Tu minishell: trata "c" como comando
-Reparación requerida: expansión de variables debe concatenar correctamente
-----------------------------------------
-
-wtang@c3r2s2:/$ $LESS$VAR
-wtang@c3r2s2:/$
-
-minishell$ $LESS$VAR
-Permission denied
-# Cumple requisitos: intenta ejecutar comando inexistente
 ----------------------------------------
 
 wtang@c3r2s2:/$ echo bonjour > $test w/ t
@@ -173,14 +95,6 @@ minishell$ ;
 # Cumple requisitos: punto y coma no interpretado como separador
 ----------------------------------------
 
-wtang@c3r2s2:~$ echo '$HOME'
-$HOME
-# Debería mostrar: $HOME
-
-minishell$ echo '$HOME'
-/home/wtang
-# Error: comillas simples no deberían expandir variables
-----------------------------------------
 
 export ; env # display is different for both commands
 # export: muestra variables exportadas (formato: declare -x VAR=value)
@@ -198,15 +112,6 @@ Con parámetros: establece variables exportadas
 Manejar correctamente límites de parámetros
 ----------------------------------------
 
-wtang@c3r2s2:~$ > log echo coucou
-wtang@c3r2s2:~$
-# Correcto: redirige a log primero, luego ejecuta echo
-
-minishell$ > log echo coucou
-coucou
-# Error: salida directa a terminal, sin redirección
-Problema: orden de análisis de redirección incorrecto
-----------------------------------------
 
 wtang@c3r2s2:~$ echo "\"
 > ^C
@@ -218,19 +123,6 @@ minishell: syntax error: unclosed quotes
 Problema: requisito dice "no interpretar comillas sin cerrar" pero debería esperar entrada continua
 ----------------------------------------
 
-wtang@c3r2s2:~$ echo "\n \n \n"
-\n \n \n
-
-minishell$ echo "\n \n \n"
-minishell: syntax error: invalid escape sequence
-
-wtang@c3r2s2:~$ echo "\n \n \\n"
-\n \n \n
-
-minishell$ echo "\n \n \\n"
-minishell: syntax error: invalid escape sequence
-# Tu comportamiento es correcto (cumple requisitos): no interpretar backslash
-----------------------------------------
 
 wtang@c3r2s2:~$ echo ;;
 bash: syntax error near unexpected token `;;'
@@ -240,30 +132,3 @@ minishell$ echo ;;
 # Tu comportamiento es correcto (cumple requisitos): muestra ;; (no interpreta punto y coma)
 ----------------------------------------
 
-wtang@c3r2s2:/$ echo $?
-130
-
-minishell$ echo $?
-$?
-Gestionar $?, que deberá expandirse al estado de salida del comando más reciente
-----------------------------------------
-
-wtang@c3r2s2:/$ > a ls > b < Makefile
-bash: a: Permission denied
-
-minishell$ > a ls > b < Makefile
-open: Permission denied
-Tu minishell: open: Permission denied (parcialmente correcto)
-Pero debería manejar más elegantemente, posiblemente verificar permisos antes de ejecutar
-----------------------------------------
-
-wtang@c3r2s2:/$ echo > a Hello World!
-bash: a: Permission denied
-
-minishell$ echo > a Hello World!
-Hello World!
-
-minishell$ > a echo Hello World!
-Hello World!
-Tu minishell: ejecuta echo incluso con permiso denegado
-Comportamiento correcto: si redirección falla, comando completo debe fallar

@@ -1,15 +1,4 @@
-    - </<</>/>>
-    
-wtang@c3r2s2:~/minishell$ </<</>/>>
-> ^C
 
-minishell$ </<</>/>>
-minishell: syntax error near unexpected token
-zsh: segmentation fault (core dumped)  ./minishell  
-问题： 段错误（segmentation fault）是不可接受的！
-修复： 需要改进语法检查，在遇到无效重定向时应该：
-显示明确的错误信息
-不崩溃，继续等待下一个命令  
 -----------------------
 
     - echo hola>file
