@@ -1,0 +1,135 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_pipeline_core.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/10 18:42:25 by wtang             #+#    #+#             */
+/*   Updated: 2025/12/11 12:42:58 by wtang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+// =============================
+// 命令管道执行主流程
+// =============================
+// 设置子进程的管道输入输出
+// setup_child_pipe_io:
+// 1. 若 in_fd 不是标准输入，将其 dup2 到 STDIN_FILENO。
+// 2. 若有下一个命令，将 pipe 写端 dup2 到 STDOUT_FILENO。
+// 3. 关闭不再需要的 pipe 端口。
+static void	setup_child_pipe_io(int in_fd, int pipefd[2], t_command *cmd)
+{
+	if (in_fd != STDIN_FILENO)
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
+	if (cmd->next)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+	}
+	if (cmd->next)
+		close(pipefd[0]);
+}
+
+// execute_pipeline_command:
+// 1. 判断是否为内建命令，若是先处理重定向再执行。
+// 2. 否则调用 child_process 执行外部命令。
+static void	execute_pipeline_command(t_command *cmd, t_env *env)
+{
+	int	status;
+
+	if (is_builtin_command(cmd) == SUCCESS)
+	{
+		if (handle_redirections(cmd, env, 0) != SUCCESS)
+			exit(EXIT_FAILURE);
+		status = execute_builtins(cmd, env);
+		exit(status);
+	}
+	else
+		child_process(cmd, env);
+}
+
+// manage_parent_process:
+// 1. 关闭上一个 in_fd。
+// 2. 若有下一个命令，将 pipe 读端作为下一个 in_fd。
+static void	manage_parent_process(int *in_fd, int pipefd[2], t_command *cmd)
+{
+	if (*in_fd != STDIN_FILENO)
+		close(*in_fd);
+	if (cmd->next)
+	{
+		close(pipefd[1]);
+		*in_fd = pipefd[0];
+	}
+}
+
+// wait_for_all:
+// 1. 循环等待所有子进程，记录最后一个命令的退出状态。
+// 2. 若有进程被 Ctrl+C 中断，主进程输出换行。
+// 3. 返回最后一个命令的退出码。
+static int	wait_for_all(pid_t last_pid)
+{
+	int					status;
+	int					last_status;
+	pid_t				pid;
+	int					interrupted;
+
+	interrupted = 0;
+	last_status = SUCCESS;
+	ignore_sigint();
+	pid = wait(&status);
+	while (pid > 0)
+	{
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			interrupted = 1;
+		if (pid == last_pid)
+		{
+			if (WIFEXITED(status))
+				last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				last_status = 128 + WTERMSIG(status);
+		}
+		pid = wait(&status);
+	}
+	if (interrupted)
+		write(1, "\n", 1);
+	return (setup_signals(), last_status);
+}
+
+// execute_pipeline_core:
+// 1. 遍历命令链表，每个命令 fork 一个子进程。
+// 2. 管道连接各进程输入输出。
+// 3. 父进程收集退出状态，返回最后一个命令的状态。
+int	execute_pipeline_core(t_command *cmd, t_env *env)
+{
+	int		in_fd;
+	int		pipefd[2];
+	pid_t	pid;
+	pid_t	last_pid;
+
+	in_fd = STDIN_FILENO;
+	last_pid = 0;
+	while (cmd)
+	{
+		if (cmd->next && pipe(pipefd) == -1)
+			return (perror("pipe"), FAILURE);
+		pid = fork();
+		if (pid == -1)
+			return (perror("fork"), FAILURE);
+		if (pid == 0)
+		{
+			setup_child_pipe_io(in_fd, pipefd, cmd);
+			execute_pipeline_command(cmd, env);
+			exit (EXIT_FAILURE);
+		}
+		last_pid = pid;
+		manage_parent_process(&in_fd, pipefd, cmd);
+		cmd = cmd->next;
+	}
+	return (wait_for_all(last_pid));
+}

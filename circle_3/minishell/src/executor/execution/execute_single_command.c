@@ -1,0 +1,140 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_single_command.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/10 18:33:22 by wtang             #+#    #+#             */
+/*   Updated: 2025/12/11 12:44:24 by wtang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+// =============================
+// 单命令执行主流程
+// =============================
+// 执行内建命令，根据 argv[0] 匹配具体实现
+// execute_builtins:
+// 1. 根据 argv[0] 判断并调用对应内建命令实现。
+// 2. 若不是内建命令返回 FAILURE。
+int	execute_builtins(t_command *cmd, t_env *env)
+{
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (FAILURE);
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0 && cmd->argv[0][4] == '\0')
+		return (builtin_echo(cmd));
+	else if (ft_strncmp(cmd->argv[0], "cd", 2) == 0 && cmd->argv[0][2] == '\0')
+		return (builtin_cd(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0 && cmd->argv[0][3] == '\0')
+		return (builtin_pwd(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], "export", 6) == 0
+		&& cmd->argv[0][6] == '\0')
+		return (builtin_export(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], "unset", 5) == 0
+		&& cmd->argv[0][5] == '\0')
+		return (builtin_unset(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], "env", 3) == 0 && cmd->argv[0][3] == '\0')
+		return (builtin_env(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], "exit", 4) == 0
+		&& cmd->argv[0][4] == '\0')
+		return (builtin_exit(cmd, env));
+	else if (ft_strncmp(cmd->argv[0], ".", 1) == 0 && cmd->argv[0][1] == '\0')
+		return (builtin_dot(cmd));
+	else
+		return (FAILURE);
+}
+
+// is_builtin_command:
+// 1. 判断 argv[0] 是否为内建命令名。
+// 2. 是则返回 SUCCESS，否则返回 FAILURE。
+int	is_builtin_command(t_command *cmd)
+{
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (FAILURE);
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0 && cmd->argv[0][4] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "cd", 2) == 0 && cmd->argv[0][2] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0 && cmd->argv[0][3] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "export", 6) == 0 && cmd->argv[0][6] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "unset", 5) == 0 && cmd->argv[0][5] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "env", 3) == 0 && cmd->argv[0][3] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "exit", 4) == 0 && cmd->argv[0][4] == '\0')
+		return (SUCCESS);
+	if (ft_strncmp(cmd->argv[0], ".", 1) == 0 && cmd->argv[0][1] == '\0')
+		return (SUCCESS);
+	return (FAILURE);
+}
+
+// restore_fds:
+// 1. 恢复被重定向的标准输入输出。
+// 2. 关闭保存的 fd。
+static void	restore_fds(int saved_stdin, int saved_stdout)
+{
+	if (saved_stdin != -1)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout != -1)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+}
+
+// setup_redirections:
+// 1. 若有重定向，保存原始 stdin/stdout。
+// 2. 处理所有重定向，失败时恢复原始 fd 并返回 FAILURE。
+static int	setup_redirections(t_command *cmd, int *saved_stdin,
+		int *saved_stdout, t_env *env)
+{
+	*saved_stdin = -1;
+	*saved_stdout = -1;
+	if (cmd->redirect_count > 0)
+	{
+		*saved_stdin = dup(STDIN_FILENO);
+		*saved_stdout = dup(STDOUT_FILENO);
+		if (*saved_stdin == -1 || *saved_stdout == -1)
+		{
+			restore_fds(*saved_stdin, *saved_stdout);
+			return (FAILURE);
+		}
+		if (handle_redirections(cmd, env, 0) != SUCCESS)
+		{
+			restore_fds(*saved_stdin, *saved_stdout);
+			return (FAILURE);
+		}
+	}
+	return (SUCCESS);
+}
+
+// execute_single_command:
+// 1. 判断是否为内建命令，若是先处理重定向再执行。
+// 2. 否则直接执行外部命令。
+// 3. 返回命令执行状态。
+// 执行单个命令（内建或外部），并处理重定向
+int	execute_single_command(t_command *cmd, t_env *env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+	int	status;
+
+	if (is_builtin_command(cmd) == SUCCESS)
+	{
+		if (setup_redirections(cmd, &saved_stdin, &saved_stdout, env)
+			!= SUCCESS)
+			return (FAILURE);
+		status = execute_builtins(cmd, env);
+		restore_fds(saved_stdin, saved_stdout);
+	}
+	else
+		status = execute_external_command(cmd, env);
+	return (status);
+}
