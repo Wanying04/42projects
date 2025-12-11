@@ -6,16 +6,12 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 21:00:27 by wtang             #+#    #+#             */
-/*   Updated: 2025/12/11 12:40:09 by wtang            ###   ########.fr       */
+/*   Updated: 2025/12/11 19:06:42 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// =============================
-// 字符串与数值转换相关工具函数
-// =============================
-// 检查 long long 类型溢出
 // 检查 number*10+digit 是否会溢出 long long，正负号分支分别判断
 static int	check_ll_overflow(long long number, int sign, char digit)
 {
@@ -31,7 +27,6 @@ static int	check_ll_overflow(long long number, int sign, char digit)
 	return (1);
 }
 
-// 字符串转 long long，支持正负号
 // 字符串转 long long，支持正负号，遇到溢出返回 0
 static int	ft_str_to_ll(const char *nptr, long long *number)
 {
@@ -59,7 +54,6 @@ static int	ft_str_to_ll(const char *nptr, long long *number)
 	return (1);
 }
 
-// 字符串转 int，带溢出检查
 // 字符串转 int，带溢出检查，失败返回 0
 int	ft_atol(const char *nptr, int *value)
 {
@@ -73,9 +67,6 @@ int	ft_atol(const char *nptr, int *value)
 	return (1);
 }
 
-// =============================
-// 命令参数有效性与清理相关工具函数
-// =============================
 // 判断参数是否为有效（非空或特殊标记）
 // 判断参数 arg 是否为有效参数：
 // 1. 非空字符串直接有效
@@ -89,7 +80,6 @@ static int	is_valid_arg(char *arg)
 	return (0);
 }
 
-// 清理命令参数中的空参数
 // 清理命令参数中的空参数：
 // 1. 跳过无效参数并释放内存
 // 2. 有效参数前移，保证 argv 紧凑无空洞

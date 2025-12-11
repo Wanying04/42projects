@@ -6,7 +6,7 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 21:26:02 by wtang             #+#    #+#             */
-/*   Updated: 2025/12/11 12:59:14 by wtang            ###   ########.fr       */
+/*   Updated: 2025/12/11 19:05:32 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 // 全局变量：用于接收 SIGINT 信号（如 Ctrl+C），让主循环能感知用户中断。
 volatile sig_atomic_t	g_sigint_received = 0;
 
-static void	process_input(char *input, t_env *env)
 /*
  * 用户输入处理流程：
  * 1. 检查输入是否为空或全空白，若是则直接返回。
@@ -23,6 +22,7 @@ static void	process_input(char *input, t_env *env)
  * 3. 解析输入为命令链表。
  * 4. 若解析成功则执行命令链表，并释放内存。
  */
+static void	process_input(char *input, t_env *env)
 {
 	t_command	*cmd_list;
 
@@ -37,7 +37,6 @@ static void	process_input(char *input, t_env *env)
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
 /*
  * minishell 主程序入口：
  * 1. 忽略 argc/argv，仅用 envp 初始化环境变量。
@@ -49,6 +48,7 @@ int	main(int argc, char **argv, char **envp)
  *    - 非空输入则进入命令解析与执行流程。
  *    - 每次循环释放输入内存。
  */
+int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	char	*input;

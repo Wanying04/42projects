@@ -6,15 +6,12 @@
 /*   By: wtang <wtang@student.42malaga.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 21:00:27 by wtang             #+#    #+#             */
-/*   Updated: 2025/12/11 12:58:18 by wtang            ###   ########.fr       */
+/*   Updated: 2025/12/11 19:10:17 by wtang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 移除路径的最后一个部分
-char	*remove_last_component(char *path)
-{
 /*
  * 移除路径的最后一个部分
  * 1. 若路径为根目录直接返回 "/"
@@ -42,9 +39,6 @@ char	*remove_last_component(char *path)
 	return (result);
 }
 
-// 构建逻辑路径（如 cd ..）
-char	*build_logical_path(char *current_pwd, char *target)
-{
 /*
  * 构建逻辑路径（如 cd ..）
  * 1. 若 target 为 ".." 或空，返回当前路径的上一级
@@ -59,9 +53,6 @@ char	*build_logical_path(char *current_pwd, char *target)
 	return (NULL);
 }
 
-// 设置环境变量
-void	set_env_var(t_env *env, const char *name, const char *value)
-{
 /*
  * 设置环境变量
  * 1. 拼接 name 和 value 形成 "name=value"
@@ -84,8 +75,6 @@ void	set_env_var(t_env *env, const char *name, const char *value)
 	}
 }
 
-void	update_pwd_oldpwd(t_env *env, char *old_cwd, char *new_cwd)
-{
 /*
  * 更新 PWD 和 OLDPWD 环境变量
  * 1. 释放原有 oldpwd/pwd，赋新值
