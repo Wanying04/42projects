@@ -1,37 +1,74 @@
 Assignment name: broken_GNL
 Expected files: get_next_line.c get_next_line.h
 Allowed functions: read, free, malloc
+-----------------------------------------------------
 
 Repair the function 'get_next_line' in the file get_next_line.c, whose prototype should be:
+修复文件中的 'get_next_line' 函数，其函数原型应为：
 
 char *get_next_line(int fd);
 
 You may need to repair other functions as well.
+你可能还需要修复其他函数。
 
 Description of the 'get_next_line' function:
+'get_next_line' 函数的描述：
 
 Your function must return a line that has been read from the file descriptor passed as a parameter.
+你的函数必须返回从参数指定的文件描述符中读取的一行内容。
 
 A 'line that has been read' is defined as a succession of 0 to n characters ending with '\n' (ASCII code 0x0a) or with End Of File (EOF).
+“一行内容”被定义为以 '\n'（ASCII 码 0x0a）或文件结尾（EOF）结束的 0 到 n 个字符的连续序列。
 
 The line should be returned including the '\n' if there is one at the end of the line that has been read.
+如果读取到的行末尾有 '\n'，则返回的字符串应包含该 '\n'。
 
 When you reach the EOF, you must store the current buffer in a char * and return it. If the buffer is empty, you must return NULL.
+当到达文件结尾时，你必须将当前缓冲区内容存储到一个 char * 并返回。如果缓冲区为空，则必须返回 NULL。
 
 In case of an error, return NULL.
+如果发生错误，返回 NULL。
 
 If not returning NULL, the pointer should be freeable.
+如果不是返回 NULL，返回的指针必须可以被 free。
 
 Your program will be compiled with the flag -D BUFFER_SIZE=xx, which must be used as the buffer size for the read calls in your functions.
+你的程序会用 -D BUFFER_SIZE=xx 编译，这个 BUFFER_SIZE 必须作为你 read 调用时的缓冲区大小。
 
 Your function must be free of memory leaks.
+你的函数必须没有内存泄漏。
 
 When you reach the EOF, your function should not keep any memory allocated with malloc except for the line that has been returned.
+当到达文件结尾时，除了已返回的那一行，函数不应保留任何用 malloc 分配的内存。
 
-Calling your function get_next_line in a loop will allow you to read the text available on a file descriptor one line at a time until the end of the text, regardless of the size of the text or any of its lines.
+Calling your function get_next_line in a loop will allow you to read the text available on a file 
+descriptor one line at a time until the end of the text, regardless of the size of the text or any of 
+its lines.
+循环调用 get_next_line 可以让你一次读取一个文件描述符中的一行文本，直到文本结束，
+无论文本或行的长度是多少。
 
 Ensure that your function behaves correctly when reading from a file, from the standard output, from a redirection etc.
+确保你的函数在从文件、标准输出、重定向等读取时都能正确工作。
 
 No call to another function will be done on the file descriptor between two calls of get_next_line.
+在两次调用 get_next_line 之间，不会对该文件描述符进行其他函数调用。
 
 Finally, we consider that get_next_line has undefined behaviour when reading from a binary file.
+最后，我们认为 get_next_line 在读取二进制文件时行为未定义。
+
+-----------------------------------------------------
+
+
+这道题要求你修复 get_next_line 函数（在 get_next_line.c 文件中），其作用是：每次调用时，
+从给定的文件描述符（fd）中读取一行文本并返回。你需要确保：
+
+每次返回一行（包括结尾的 \n，如果有的话），或者在文件结尾时返回剩余内容（如果有），否则返回 NULL。
+你只能用 read、malloc、free 这三个库函数。
+你必须用 BUFFER_SIZE 作为每次 read 的缓冲区大小（编译时会用 -D BUFFER_SIZE=xx 指定）。
+不能有内存泄漏。每次返回的字符串必须可以被 free，且到达 EOF 后不能有多余的内存分配。
+你的实现要能处理任意长度的行和文件，且多次调用 get_next_line 能一行一行地读完整个文件。
+如果出错（如 read 返回 -1），要返回 NULL。
+不能在两次 get_next_line 调用之间对 fd 做其他操作。
+
+简而言之：你要实现一个“逐行读取文件”的函数，能正确处理各种情况（长行、EOF、错误、
+内存管理），并且只能用最基础的 C 库函数。

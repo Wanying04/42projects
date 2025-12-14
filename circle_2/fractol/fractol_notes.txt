@@ -1,0 +1,128 @@
+Proyecto de CGI
+fract’ol
+
+CGI 项目
+fract'ol
+
+Resumen:
+Este proyecto busca crear fractales gráficamente bonitos.
+
+摘要：
+本项目旨在创建图形精美的分形。
+
+Objetivos
+Es el momento de que crees un proyecto básico de gráficos por ordenador. Vas a utilizar la librería gráfica del campus: la miniLibX. Esta librería ha sido creada de manera interna e incluye herramientas básicas necesariaspara abrir una ventana, crear imágenes y hacer frente a los eventos del teclado y del ratón.
+Este nuevo proyecto será tu oportunidad para familiarizarte con la miniLibX, para que descubras o utilices la noción matemática de números complejos y eches un vistazo al concepto de optimización en CGI y practiques el manejo de acontecimientos.
+
+No olvides ver los vídeos en e-learning.
+
+目标
+现在是时候创建一个基本的计算机图形项目了。您将使用校园图形库：miniLibX。该库由学校内部开发，包含打开窗口、创建图像以及处理键盘和鼠标事件所需的基本工具。
+这个新项目将为您提供机会熟悉 miniLibX，探索或使用复数的数学概念，探索 CGI 中的优化概念并练习事件处理。
+
+别忘了观看在线学习视频。
+
+Instrucciones generales
+• Tu proyecto deberá estar escrito en C.
+• Tu proyecto debe estar escrito siguiendo la Norma. Si tienes archivos o funciones adicionales, estas están incluidas en la verificación de la Norma y tendrás un 0 si
+hay algún error de norma en cualquiera de ellos.
+• Tus funciones no deben terminar de forma inesperada (segfault, bus error, double free, etc) excepto en el caso de comportamientos indefinidos. Si esto sucede, tu
+proyecto será considerado no funcional y recibirás un 0 durante la evaluación.
+• Toda la memoria asignada en el heap deberá liberarse adecuadamente cuando sea necesario. No se permitirán leaks de memoria.
+• Si el enunciado lo requiere, deberás entregar un Makefile que compilará tus archivos fuente al output requerido con las flags -Wall, -Werror y -Wextra, utilizar cc y
+por supuesto tu Makefile no debe hacer relink.
+• Tu Makefile debe contener al menos las normas $(NAME), all, clean, fclean y re.
+• Para entregar los bonus de tu proyecto deberás incluir una regla bonus en tu Makefile, en la que añadirás todos los headers, librerías o funciones que estén prohibidas en la parte principal del proyecto. Los bonus deben estar en archivos distintos _bonus.{c/h}. La parte obligatoria y los bonus se evalúan por separado.
+• Si tu proyecto permite el uso de la libft, deberás copiar su fuente y sus Makefile asociados en un directorio libft con su correspondiente Makefile. El Makefile de tu proyecto debe compilar primero la librería utilizando su Makefile, y después compilar el proyecto.
+• Te recomendamos crear programas de prueba para tu proyecto, aunque este trabajo no será entregado ni evaluado. Te dará la oportunidad de verificar que tu
+programa funciona correctamente durante tu evaluación y la de otros compañeros. 
+• Y sí, tienes permitido utilizar estas pruebas durante tu evaluación o la de otros compañeros.
+• Entrega tu trabajo en tu repositorio Git asignado. Solo el trabajo de tu repositorio Git será evaluado. Si Deepthought evalúa tu trabajo, lo hará después de tus compañeros. Si se encuentra un error durante la evaluación de Deepthought, esta habrá terminado.
+
+一般说明
+• 您的项目必须使用 C 语言编写。
+• 您的项目必须符合标准。如果您有其他文件或函数，它们将被纳入标准检查，如果其中任何一个存在任何标准错误，您将收到 0 分。
+• 您的函数不得意外终止（段错误、总线错误、双重释放等），除非出现未定义行为的情况。如果发生这种情况，您的项目将被视为无法运行，评估期间您将收到 0 分。
+• 所有在堆上分配的内存必须在必要时妥善释放。不允许出现内存泄漏。
+• 如果声明要求，您必须提交一个 Makefile，该文件将使用 -Wall、-Werror 和 -Wextra 标志将您的源文件编译为所需的输出，并使用 cc，当然，您的 Makefile 不得重新链接。
+• 您的 Makefile 必须至少包含 $(NAME)、all、clean、fclean 和 re 规则。
+• 要为您的项目提交奖励，您必须在 Makefile 中包含一条奖励规则，在该规则中添加项目主体部分中禁止的所有头文件、库或函数。奖励必须位于单独的 _bonus.{c/h} 文件中。强制部分和奖励将分开评估。
+• 如果您的项目允许使用 libft，您必须将其源代码和相关的 Makefile 及其对应的 Makefile 复制到 libft 目录中。你的项目的 Makefile 必须先使用其 Makefile 编译库，然后再编译项目。
+• 我们鼓励你为你的项目创建测试程序，但这些测试程序不会被提交或评估。这将使你有机会在你和其他同学的评估中验证你的程序是否正常运行。是的，你可以在你或其他同学的评估中使用这些测试程序。
+• 把你的作品提交到你指定的 Git 仓库。只有你 Git 仓库中的作品才会被评估。如果 Deepthought 评估你的作品，它会在你的同伴之后进行评估。如果在 Deepthought 评估中发现错误，则评估结束。
+
+Parte obligatoria
+Tu proyecto tendrá que seguir las siguientes reglas:
+• Tienes que utilizar la miniLibX, ya sea la versión disponible en los ordenadores del campus o la que instales usando sus fuentes originales.
+• Tendrás que entregar un Makefile que compilará tus archivos fuente. No debe hacer relink.
+• Las variables globales están prohibidas.
+
+必填部分
+你的项目必须遵循以下规则：
+• 你必须使用 miniLibX，可以是校园电脑上提供的版本，也可以是你使用原始源代码安装的版本。
+• 你必须提交一个可以编译源文件的 Makefile。它不能重新链接。
+• 禁止使用全局变量。
+
+V.1. Renderizado
+• Tu programa debe ofrecer los conjuntos de Julia y Mandelbrot.
+• La rueda del ratón hace zoom in y zoom out y lo hace casi infinitamente (dentro de los límites del ordenador). Ese es el concepto de un fractal.
+• Debes poder crear un conjunto de Julia diferente mediante los parámetros del programa.
+• Un parámetro se pasará a través de la CLI para definir el tipo de fractal visualizado.
+◦ Puedes usar más parámetros como opciones de renderizado.
+◦ Si no se introduce un parámetro, o si el parámetro es inválido, el programa mostrará una lista de parámetros disponibles y terminará correctamente.
+• Debes usar al menos unos pocos colores para mostrar la profundidad de cada fractal. Es incluso mejor si te adentras en los efectos psicodélicos.
+
+V.1. 渲染
+• 您的程序必须提供朱利亚集和曼德布洛特集。
+• 鼠标滚轮可以几乎无限地缩放（在计算机的限制范围内）。这就是分形的概念。
+• 您必须能够使用程序参数创建不同的朱利亚集。
+• 命令行界面 (CLI) 会传递一个参数来定义显示的分形类型。
+• 您可以使用更多参数作为渲染选项。
+• 如果未输入参数或参数无效，程序将显示可用参数列表并正常终止。
+• 您必须至少使用几种颜色来显示每个分形的深度。如果您深入研究迷幻效果，那就更好了。
+
+V.2. Representación gráfica
+• Tu programa tiene que mostrar la imagen en una ventana.
+• El manejo de tu ventana debe ser fluido (cambio a otra ventana, minimización y demás)
+• ESC debe cerrar la ventana y salir del programa de manera limpia.
+• Hacer click en la cruz del marco de la ventana debe cerrarla y cerrar el programa de manera limpia.
+• El uso de images de la MiniLibX es obligatorio.
+
+V.2. 图形表示
+• 您的程序必须在窗口中显示图像。
+• 您的窗口应该流畅（切换到另一个窗口、最小化等）。
+• ESC 键应该可以关闭窗口并干净地退出程序。
+• 单击窗口框架中的十字即可关闭窗口并退出程序。
+• 必须使用 MiniLibX 图像。
+
+Parte extra
+Habitualmente, te animaríamos a que desarrollaras nuevas características extra. Sin embargo, habrá proyectos gráficos mucho más interesantes más adelante. ¡Te están esperando! ¡No pierdas demasiado tiempo en este ejercicio!
+Conseguirás algunos puntos extra con lo siguiente:
+• Un fractal diferente más (hay más de cien referencias a distintos tipos de fractales online).
+• El zoom sigue la posición actual del ratón.
+• Adicionalmente al zoom: moverse con flechas.
+• Haz que el rango de color cambie.
+
+奖励部分
+通常情况下，我们鼓励您开发新的奖励功能。不过，之后还会有更多有趣的图形项目，等着您！不要在这个练习上浪费太多时间！
+完成以下练习将获得一些奖励积分：
+• 再添加一个不同的分形（网上有超过一百种不同类型的分形参考资料）。
+• 缩放跟随当前鼠标位置。
+• 除了缩放之外，还可以使用箭头移动。
+• 更改颜色范围。
+
+La parte bonus será exclusivamente evaluada si la parte obligatoria está PERFECTA. Perfecta significa que todos los requisitos de la parte obligatoria deben estar correctamente completados y funcionan perfectamente. De otro modo, tus bonus no serán evaluados de ninguna manera.
+
+只有当必修部分达到“完美”要求时，才会对奖励部分进行评估。“完美”要求所有必修部分的要求都必须正确完成并且完美运行。否则，您的奖励部分将不会被评估。
+
+Entrega y evaluación
+Entrega tu trabajo en tu repositorio Git como de costumbre. Solo el trabajo de tu repositorio será evaluado. Comprueba dos veces si es necesario que los nombres de tus archivos sean los correctos.
+Como estos ejercicios no se verifican con un programa, puedes organizar tus archivos como quieras, siempre que entregues los archivos obligatorios y cumplas los requisitos.
+
+提交和评估
+像往常一样将您的作品提交到您的 Git 仓库。只有来自您仓库的作品才会被评估。如有必要，请仔细检查您的文件名是否正确。
+由于这些练习无需程序验证，因此您可以随意组织文件，只要您提交了所需的文件并满足要求即可。
+
+
+
+
