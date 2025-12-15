@@ -49,8 +49,7 @@ line that has been returned.
 Calling your function get_next_line in a loop will allow you to read the text available on a file 
 descriptor one line at a time until the end of the text, regardless of the size of the text or any of
 its lines.
-循环调用 get_next_line 可以让你一次读取一个文件描述符中的一行文本，直到文本结束，
-无论文本或行的长度是多少。
+循环调用 get_next_line 可以让你一次读取一个文件描述符中的一行文本，直到文本结束，无论文本或行的长度是多少。
 
 Ensure that your function behaves correctly when reading from a file, from the standard output, from 
 a redirection etc.
@@ -66,11 +65,10 @@ Finally, we consider that get_next_line has undefined behaviour when reading fro
 
 
 
-这道题要求你修复 get_next_line 函数（在 get_next_line.c 文件中），其作用是：每次调用时，
-从给定的文件描述符（fd）中读取一行文本并返回。你需要确保：
+这道题要求你修复 get_next_line 函数（在 get_next_line.c 文件中），其作用是：每次调用时，从给定的文件描述符（fd）中
+读取一行文本并返回。你需要确保：
 
-每次返回一行（包括结尾的 \n，如果有的话），或者在文件结尾时返回剩余内容（如果有），
-否则返回 NULL。
+每次返回一行（包括结尾的 \n，如果有的话），或者在文件结尾时返回剩余内容（如果有），否则返回 NULL。
 你只能用 read、malloc、free 这三个库函数。
 你必须用 BUFFER_SIZE 作为每次 read 的缓冲区大小（编译时会用 -D BUFFER_SIZE=xx 指定）。
 不能有内存泄漏。每次返回的字符串必须可以被 free，且到达 EOF 后不能有多余的内存分配。
@@ -78,5 +76,4 @@ Finally, we consider that get_next_line has undefined behaviour when reading fro
 如果出错（如 read 返回 -1），要返回 NULL。
 不能在两次 get_next_line 调用之间对 fd 做其他操作。
 
-简而言之：你要实现一个“逐行读取文件”的函数，能正确处理各种情况（长行、EOF、错误、
-内存管理），并且只能用最基础的 C 库函数。
+简而言之：你要实现一个“逐行读取文件”的函数，能正确处理各种情况（长行、EOF、错误、内存管理），并且只能用最基础的 C 库函数。
