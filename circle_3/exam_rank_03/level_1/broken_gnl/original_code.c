@@ -3,7 +3,7 @@
 char *ft_strchr(char *s, int c)
 {
   int i = 0;
-  while(s[i] && s[i] != c)  // + s[i] &&
+  while(s[i] != c)
     i++;
   if (s[i] == c)
     return s + i;
@@ -11,20 +11,17 @@ char *ft_strchr(char *s, int c)
     return NULL;
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)  // rewrite
+void *ft_memcpy(void *dest, const void *src, size_t n)
 {
-	char		*d = dest;
-	const char	*s = src;
-
-	while (n--)
-		*d++ = *s++;
-	return dest;
+  while(--n > 0)
+    ((char *)dest)[n - 1] = ((char *)src)[n - 1];
+  return dest;
 }
 
 size_t ft_strlen(char *s)
 {
   size_t res = 0;
-  while (s && *s)  // + s &&
+  while (*s)
   {
     s++;
     res++;
@@ -51,22 +48,19 @@ int str_append_str(char **s1, char *s2)
   return str_append_mem(s1, s2, ft_strlen(s2));
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)  // rewrite
+void *ft_memmove(void *dest, const void *src, size_t n)
 {
-	char		*d = dest;
-	const char	*s = src;
-
-	if (d < s)
-	{
-		while (n--)
-			*d++ = *s++;
-	}
-	else if (d > s)
-	{
-		while (n--)
-			d[n] = s[n];
-	}
-	return dest;
+  if (dest > src)
+    return ft_memmove(dest, src, n);
+  else if (dest == src)
+    return dest;
+  size_t i = ft_strlen((char *)src) - 1;
+  while (i >= 0)
+  {
+    ((char *)dest)[i] = ((char *)src)[i];
+    i--;
+  }
+  return dest;
 }
 
 char *get_next_line(int fd)
@@ -80,25 +74,13 @@ char *get_next_line(int fd)
       return (NULL);
     int read_ret = read(fd, b, BUFFER_SIZE);
     if (read_ret == -1)
-	{
-	  free (ret);  // free ret
       return (NULL);
-	}
     b[read_ret] = 0;
-	if (read_ret == 0)  // EOF
-	{
-		if (ret && *ret)
-			return ret;
-		free (ret);
-		return NULL;
-	}
-	tmp = ft_strchr(b, '\n');  // add
   }
   if (!str_append_mem(&ret, b, tmp - b + 1))
   {
     free(ret);
     return NULL;
   }
-  ft_memmove(b, tmp + 1, ft_strlen(tmp + 1) + 1);  // add
   return ret;
 }
