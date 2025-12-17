@@ -4,10 +4,13 @@ Allowed functions: puts, malloc, calloc, realloc, free, write
 ---------------------------------------------------------------
 
 Write a program that will print all the permutations of a string given as argument.
+编写一个程序，打印给定字符串的所有排列。
 
 The solutions must be given in alphabetical order.
+解决方案必须按字母顺序排列。
 
 We will not try your program with strings containing duplicates (eg: 'abccd').
+我们不会用包含重复字符的字符串（例如：‘abccd’）来测试你的程序。
 
 For example this should work:
 
