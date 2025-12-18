@@ -8,8 +8,14 @@ if the parenthesis are unbalanced (for example "())")
 your program shall remove the minimum number of parentheses for the expression to be balanced.
 By removing we mean replacing by spaces.
 You will then print all the solutions (can be more than one).
+编写一个程序，其参数为仅含括号的字符串。
+若括号不平衡（例如 “())”），
+程序应移除最少数量的括号以使表达式平衡。
+移除操作指用空格替换括号。
+程序需输出所有解法（可能存在多个）。
 
 The order of the solutions is not important.
+解法的顺序无关紧要。
 
 For example this should work:
 $> ./rip '(()' | cat -e
