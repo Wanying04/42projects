@@ -1,12 +1,19 @@
 Assignment name: filter
-Expected files: filter.c
-Allowed functions and globals: read, write, strlen, memmem, memmove, malloc, calloc, realloc, free, printf, fprintf, stdout, stderr, perror
+Expected files : filter.c
+Allowed functions and globals: read, write, strlen, memmem, memmove, malloc, calloc, realloc, free,
+                               printf, fprintf, stdout, stderr, perror
+-------------------------------------------------------------------
 
 Write a program that will take one and only one argument s.
+编写一个仅接受单个参数 s 的程序。
 
-Your program will then read from stdin and write all the content read in stdout except that every occurrence of s must be replaced by '*' (as many as the length of s).
+Your program will then read from stdin and write all the content read in stdout except that every
+occurrence of s must be replaced by '*' (as many as the length of s).
+该程序将从标准输入读取数据，并将所有内容写入标准输出，但需将每次出现的 s 替换为 ‘*’（替换数量等于 s 的长度）。
 
-Your program will be tested with random buffer sizes, using a custom read function. Therefore the buffer being set in your program will be filled with a different number of chars each new call.
+Your program will be tested with random buffer sizes, using a custom read function. Therefore the
+buffer being set in your program will be filled with a different number of chars each new call.
+程序将通过自定义读取函数接受随机缓冲区大小测试。因此每次调用时，程序设置的缓冲区将填充不同数量的字符。
 
 For example:
 
@@ -18,9 +25,13 @@ sed 's/bonjour/*******/g'
 will behave in the same way as:
 sed's/abc/***/g'
 
-More generally your program must be the equivalent of the shell script filter.sh present in this directory (you can compare your program with it).
+More generally your program must be the equivalent of the shell script filter.sh present in this
+directory (you can compare your program with it).
+更普遍而言，您的程序必须等效于本目录中的shell脚本filter.sh（可与之对比验证）。
 
-In case of error during a read or a malloc, you must write "Error: " followed by the error message in stderr and return 1.
+In case of error during a read or a malloc, you must write "Error: " followed by the error message
+in stderr and return 1.
+若读取或malloc操作出错，必须向stderr输出“Error:”后跟错误信息，并返回1。
 
 For example this should work:
 

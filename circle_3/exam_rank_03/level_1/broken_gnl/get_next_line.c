@@ -102,3 +102,16 @@ char *get_next_line(int fd)
   ft_memmove(b, tmp + 1, ft_strlen(tmp + 1) + 1);  // add
   return ret;
 }
+
+// int main(void)
+// {
+//     int fd = open("test.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+//     write(fd, "abc\ndef\nghi\n", 12);
+//     close(fd);
+//     fd = open("test.txt", O_RDONLY);
+//     char *line;
+//     while ((line = get_next_line(fd)))
+//         write(1, line, ft_strlen(line));
+//     close(fd);
+//     return 0;
+// }
