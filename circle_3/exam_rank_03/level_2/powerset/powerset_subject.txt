@@ -6,11 +6,18 @@ write
 
 Write a program that will take as argument an integer n followed by a set s of
 distinct integers.
+编写一个程序，接受一个整数 n 作为参数，后跟一个包含多个不同整数的集合 s。
+
 Your program should display all the subsets of s whose sum of elements is n.
+程序应显示集合 s 的所有子集，这些子集的元素之和为 n。
 
 The order of the lines is not important, but the order of the elements in a subset is:
 it must match the order in the initial set s.
+行的顺序无关紧要，但子集中元素的顺序必须与初始集合 s 中的元素顺序一致。
+
 This way, you should not have any duplicates (eg: '1 2' and '2 1').
+这样，就不会出现重复项（例如：'1 2' 和 '2 1'）。
+
 For example, using the command ./powerset 5 1 2 3 4 5
 this output is valid:
 1 4
@@ -27,10 +34,13 @@ but not this one:
 
 
 In case of a malloc error your program will exit with the code 1.
+如果出现 malloc 错误，程序将以代码 1 退出。
 
 We will not test with invalid sets (for example '1 1 2').
+我们不会使用无效集合（例如 '1 1 2'）进行测试。
 
 Hint: the empty subset is a valid subset of any set. It will be displayed as an empty line.
+提示：空子集是任何集合的有效子集。它将显示为空行。
 
 For example this should work:
 $> ./powerset 3 1 0 2 4 5 3 | cat -e

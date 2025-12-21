@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	sort_chars(char *str, int n)  // bubble sort
+// bubble sort
+void	sort_chars(char *str, int n)
 {
 	int i = 0;
 	while (i < n - 1)
@@ -45,34 +46,35 @@ void	backtrack(char *str, char *result, int *used, int i, int n)
 
 int	main(int ac, char **av)
 {
-	if (ac == 2)
+	if (ac != 2)
+		return 1;
+	int n = 0;  // count str len
+	while (av[1][n])
+		n++;
+	char *str = malloc(sizeof(char) * (n + 1));  // allocate memory
+	if (!str)
+		return 1;
+	int	i = 0;  // copy original str
+	while (i < n)
 	{
-		int n = 0;  // count str len
-		while (av[1][n])
-			n++;
-		char *str = malloc(sizeof(char) * (n + 1));  // allocate memory
-		if (!str)
-			return 1;
-		int	i = 0;  // copy original str
-		while (i < n)
-		{
-			str[i] = av[1][i];
-			i++;
-		}
-		str[n] = '\0';
-		sort_chars(str, n);  // sort the str
-		char *result = malloc(sizeof(char) * (n + 1));  // memory allocation for auxiliary arrays
-		int *used = calloc(n, sizeof(int));
-		if (!result || !used)
-		{
-			free(str);
-			return 1;
-		}
-		result[n] = '\0';
-		backtrack(str, result, used, 0, n);  // generate permutations
-		free(str);  // Release memory
+		str[i] = av[1][i];
+		i++;
+	}
+	str[n] = '\0';
+	sort_chars(str, n);  // sort the str
+	char *result = malloc(sizeof(char) * (n + 1));  // memory allocation for auxiliary arrays
+	int *used = calloc(n, sizeof(int));
+	if (!result || !used)
+	{
+		free(str);
 		free(result);
 		free(used);
+		return 1;
 	}
+	result[n] = '\0';
+	backtrack(str, result, used, 0, n);  // generate permutations
+	free(str);  // Release memory
+	free(result);
+	free(used);
 	return 0;
 }

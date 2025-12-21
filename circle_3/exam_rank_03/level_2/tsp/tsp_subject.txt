@@ -8,19 +8,28 @@ errno, stderr, stdin, stdout
 The first publication referring to this problem as the "traveling salesman
 problem" is found in the 1949 RAND Corporation report by Julia Robinson,
 "On the Hamiltonian game (a traveling salesman problem)."
+最早将此问题称为“旅行商问题”的文献是朱莉娅·罗宾逊 (Julia Robinson) 于 1949 年在
+兰德公司发表的报告《论哈密顿博弈（旅行商问题）》。
 
 Here is how she defines the problem:
+她是这样定义这个问题的：
 
 "The purpose of this note is to give a method for solving a problem related
 to the traveling salesman problem. It seems worthwhile to give a description
 of the original problem. One formulation is to find the shortest route for a
 salesman starting from Washington, visiting all the state capitals and then
 returning to Washington.
+“本文旨在提供一种解决与旅行商问题相关的问题的方法。
+有必要先描述一下原问题。
+一种表述是找到一位旅行商从华盛顿出发，访问所有州首府，然后返回华盛顿的最短路径。
 
 More generally, to find the shortest CLOSED CURVE containing n given points
 in the plane."
+更一般地，找到包含平面上 n 个给定点的最短闭合曲线。”
 
 for example with the following set of cities:
+例如，对于以下城市集合：
+
 0, 0
 1, 0
 2, 0
@@ -29,30 +38,45 @@ for example with the following set of cities:
 2, 1
 1, 2
 2, 2
+
 which can be presented as follows:
+可以表示如下：
+
 + + +
 + + +
   + +
 the shortest path is:
+最短路径为：
+
  _____
 |__   |
    |__|
 
 so you should print the length of this path that is:
+所以你应该打印出这条路径的长度：
+
 8.00
 
 Write a program that will read a set of city coordinates in the form 
 '%f, %f\n' from the standard input and will print the length of the shortest
 possible path containing all these cities under the form '%.2f'.
+编写一个程序，从标准输入读取一组城市坐标，格式为：
+'%f, %f\n'，并打印出包含所有这些城市的最短路径的长度，格式为：'%.2f'。
 
 Your program will not be tested with more than 11 cities.
+你的程序最多只能处理 11 个城市。
 
 You will find in this directory a file tsp.c containing all the boring parts of
 this exercise and example files to help you test your program.
+在这个目录下，你会找到一个名为 tsp.c 的文件，其中包含本练习的所有枯燥部分，以及一些示例文件，
+可以帮助你测试程序。
 
 hint: in order to use sqrtf, add -lm at the end of your compilation command.
+提示：要使用 sqrtf 函数，请在编译命令末尾添加 -lm。
 
 For example this should work:
+例如，以下命令应该可以工作：
+
 $> cat square.txt
 1, 1
 0, 1
@@ -62,3 +86,4 @@ $> ./tsp < square.txt | cat -e
 4.00$
 
 Hint : in order to use sqrtf , add -lm at the end of your compilation command
+提示：要使用 sqrtf 函数，请在编译命令末尾添加 -lm。

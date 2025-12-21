@@ -22,7 +22,7 @@ int	invalid(char *s)
 	return (open + close);
 }
 
-void	result(char *s, int remove, int deleted, int pos)
+void	backtrack(char *s, int remove, int deleted, int pos)
 {
 	if (remove == deleted && !invalid(s))
 	{
@@ -35,7 +35,7 @@ void	result(char *s, int remove, int deleted, int pos)
 		{
 			char	c = s[pos];
 			s[pos] = ' ';
-			result(s, remove, deleted + 1, pos + 1);
+			backtrack(s, remove, deleted + 1, pos + 1);
 			s[pos] = c;
 		}
 		pos++;
@@ -47,6 +47,6 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return 1;
 	int	remove = invalid(av[1]);
-	result(av[1], remove, 0, 0);
+	backtrack(av[1], remove, 0, 0);
 	return 0;
 }

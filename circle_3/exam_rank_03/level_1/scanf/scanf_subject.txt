@@ -3,24 +3,36 @@ Expected files   : ft_scanf.c
 Allowed functions: fgetc, ungetc, ferror, feof, isspace, isdigit, stdin, va_start, va_arg, va_copy, va_end
 --------------------------------------------------------------------------------
 
-
 Write a function named `ft_scanf` that will mimic the real scanf with the following constraints:
+编写一个名为 `ft_scanf` 的函数，该函数将模拟真正的 scanf 函数，并满足以下约束：
 
 - It will manage only the following conversions: s, d, and c
 - You don't have to handle the options *, m and '
 - You don't have to handle the maximum field width
 - You don't have to handle the types modifier characters (h, hh, l, etc.)
 - You don't have to handle the conversions beginning with %n$
+- 仅处理以下类型转换：s、d 和 c
+
+- 无需处理选项 *、m 和 '
+- 无需处理最大字段宽度
+- 无需处理类型修饰符（h、hh、l 等）
+- 无需处理以 %n$ 开头的类型转换
 
 Your function must be declared as follows:
+您的函数必须按如下方式声明：
 
 int ft_scanf(const char *, ... );
 
 You will find in this directory a file containing a part of the code you will need, you just have to complete it.
+在这个目录下，你会找到一个包含部分所需代码的文件，你只需要补充完整即可。
 
 To test your program compare your results with the real scanf.
+为了测试你的程序，请将你的结果与实际的 scanf 函数进行比较。
 
 Hint : You may need to read the man of scanf.
+提示：你可能需要阅读 scanf 函数的手册页（man）。
+
+--------------------------------------------------------------------------------
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -55,7 +67,6 @@ int scan_string(FILE *f, va_list ap)
         // You may insert code here
     return (0);
 }
-
 
 int	match_conv(FILE *f, const char **format, va_list ap)
 {
@@ -109,7 +120,6 @@ int ft_vfscanf(FILE *f, const char *format, va_list ap)
 		return EOF;
 	return nconv;
 }
-
 
 int ft_scanf(const char *format, ...)
 {
