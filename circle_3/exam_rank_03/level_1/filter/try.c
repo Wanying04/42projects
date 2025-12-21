@@ -1,11 +1,11 @@
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
 
 int	main(int ac, char **av)
 {
 	char	buffer[100000];
-	int		i = 0;
 	int		len = 0;
+	int		i = 0;
 	int		leido = 1;
 	int		j;
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av)
 		j = 0;
 		while (buffer[i + j] && av[1][j] && buffer[i + j] == av[1][j])
 			j++;
-		if (j = len)
+		if (j == len)
 		{
 			while (j--)
 			{
