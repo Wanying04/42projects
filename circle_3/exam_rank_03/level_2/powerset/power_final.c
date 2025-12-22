@@ -5,8 +5,7 @@ int	*nums;			// 存储输入的数字集合
 int	target;			// 目标和
 int	actual[100];	// 临时存储当前构建的子集
 
-/**
- * 递归求解子集和问题的函数
+/*
  * @param p_num   当前处理的数字在nums中的索引
  * @param size    数字集合的大小
  * @param p_act   当前actual数组中已存储的数字个数
